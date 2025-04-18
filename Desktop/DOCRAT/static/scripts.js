@@ -23,6 +23,12 @@ document.addEventListener('DOMContentLoaded', () => {
         industryForm.addEventListener('submit', handleIndustrySubmit);
     }
     
+    // Focus areas form submission handler
+    const focusAreasForm = document.getElementById('focus-areas-form');
+    if (focusAreasForm) {
+        focusAreasForm.addEventListener('submit', handleFocusAreasSubmit);
+    }
+    
     // Tab switching in the personalized feed
     const tabButtons = document.querySelectorAll('.tab-btn');
     if (tabButtons.length > 0) {
@@ -74,11 +80,43 @@ async function loadCurrentIndustry() {
             industrySelect.value = data.current_industry;
         }
         
+        // Load focus areas for this industry
+        loadFocusAreas(data.focus_areas, data.current_focus_areas);
+        
         return data.current_industry;
     } catch (error) {
         console.error('Failed to load industry:', error);
         return null;
     }
+}
+
+// Function to load focus areas
+function loadFocusAreas(focusAreas, selectedAreas = []) {
+    const focusAreasContainer = document.getElementById('focus-areas-container');
+    if (!focusAreasContainer) return;
+    
+    let html = '';
+    
+    if (focusAreas && focusAreas.length > 0) {
+        html += '<div class="focus-areas-grid">';
+        
+        focusAreas.forEach(area => {
+            const isChecked = selectedAreas.includes(area) ? 'checked' : '';
+            html += `
+                <div class="focus-area-item">
+                    <input type="checkbox" id="focus-${area.replace(/\s+/g, '-').toLowerCase()}" 
+                           name="focus_areas" value="${area}" ${isChecked}>
+                    <label for="focus-${area.replace(/\s+/g, '-').toLowerCase()}">${area}</label>
+                </div>
+            `;
+        });
+        
+        html += '</div>';
+    } else {
+        html = '<p class="focus-areas-empty">Please select an industry first to see available focus areas.</p>';
+    }
+    
+    focusAreasContainer.innerHTML = html;
 }
 
 // Function to handle industry form submission
@@ -109,6 +147,9 @@ async function handleIndustrySubmit(event) {
         if (response.ok) {
             industryStatus.innerHTML = '<div class="success-message">Industry updated successfully!</div>';
             
+            // Update focus areas for the new industry
+            loadFocusAreas(data.focus_areas, []);
+            
             // Reload personalized feed with new industry
             loadPersonalizedFeed();
             
@@ -125,6 +166,58 @@ async function handleIndustrySubmit(event) {
         // Reset button state
         submitButton.disabled = false;
         submitButton.textContent = 'Set Industry';
+    }
+}
+
+// Function to handle focus areas form submission
+async function handleFocusAreasSubmit(event) {
+    event.preventDefault();
+    
+    const focusAreasStatus = document.getElementById('focus-areas-status');
+    const submitButton = event.target.querySelector('button[type="submit"]');
+    
+    // Get all selected focus areas
+    const checkboxes = document.querySelectorAll('input[name="focus_areas"]:checked');
+    const selectedAreas = Array.from(checkboxes).map(cb => cb.value);
+    
+    // Show loading state
+    submitButton.disabled = true;
+    submitButton.textContent = 'Updating...';
+    focusAreasStatus.innerHTML = '<div class="loading-inline"><div class="spinner-small"></div> Updating focus areas...</div>';
+    
+    try {
+        // Send focus areas to server
+        const formData = new FormData();
+        selectedAreas.forEach(area => {
+            formData.append('focus_areas', area);
+        });
+        
+        const response = await fetch('/api/focus-areas', {
+            method: 'POST',
+            body: formData
+        });
+        
+        const data = await response.json();
+        
+        if (response.ok) {
+            focusAreasStatus.innerHTML = '<div class="success-message">Focus areas updated successfully!</div>';
+            
+            // Reload personalized feed with new focus areas
+            loadPersonalizedFeed();
+            
+            setTimeout(() => {
+                focusAreasStatus.innerHTML = '';
+            }, 3000);
+        } else {
+            focusAreasStatus.innerHTML = `<div class="error-message">${data.message || 'Failed to update focus areas.'}</div>`;
+        }
+    } catch (error) {
+        console.error('Focus areas submission error:', error);
+        focusAreasStatus.innerHTML = `<div class="error-message">Error: ${error.message}</div>`;
+    } finally {
+        // Reset button state
+        submitButton.disabled = false;
+        submitButton.textContent = 'Update Focus Areas';
     }
 }
 
@@ -248,10 +341,14 @@ function renderMeetings(meetings, container) {
         
         // Create relevance badge CSS class
         let relevanceClass = 'low-relevance';
+        let relevanceText = 'Low Relevance';
+        
         if (meeting.relevance_score >= 85) {
             relevanceClass = 'high-relevance';
+            relevanceText = 'High Relevance';
         } else if (meeting.relevance_score >= 70) {
             relevanceClass = 'medium-relevance';
+            relevanceText = 'Medium Relevance';
         }
         
         // Create HTML for the meeting card
@@ -259,7 +356,9 @@ function renderMeetings(meetings, container) {
             <div class="meeting-item">
                 <div class="meeting-header">
                     <h4 class="meeting-title">${meeting.title}</h4>
-                    <span class="relevance-badge ${relevanceClass}">${meeting.relevance_score}% relevant</span>
+                    <span class="relevance-badge ${relevanceClass}" title="Relevance score based on your business focus areas">
+                        ${meeting.relevance_score}% ${relevanceText}
+                    </span>
                 </div>
                 <div class="meeting-meta">
                     <span class="meeting-source">${meeting.source}</span>

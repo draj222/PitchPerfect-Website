@@ -169,6 +169,125 @@ SUPPORTED_INDUSTRIES = [
 DEFAULT_INDUSTRY = "city_government"
 CURRENT_INDUSTRY = os.getenv("INDUSTRY", DEFAULT_INDUSTRY)
 
+# Business focus areas within each industry
+INDUSTRY_FOCUS_AREAS = {
+    "city_government": [
+        "Urban Planning",
+        "Public Safety",
+        "Infrastructure",
+        "Parks & Recreation",
+        "Budget & Finance",
+        "Economic Development",
+        "Environmental Services",
+        "Community Services"
+    ],
+    "healthcare": [
+        "Hospital Administration",
+        "Medical Devices",
+        "Pharmaceuticals",
+        "Insurance & Billing",
+        "Health IT",
+        "Public Health",
+        "Clinical Services",
+        "Medical Research"
+    ],
+    "education": [
+        "K-12 Schools",
+        "Higher Education",
+        "EdTech",
+        "Special Education",
+        "Vocational Training",
+        "Educational Policy",
+        "School Administration",
+        "Curriculum Development"
+    ],
+    "finance": [
+        "Banking",
+        "Investment Management",
+        "Insurance",
+        "Fintech",
+        "Retirement Planning",
+        "Financial Regulation",
+        "Corporate Finance",
+        "Public Finance"
+    ],
+    "technology": [
+        "Software Development",
+        "Cybersecurity",
+        "Data & Analytics",
+        "Cloud Computing",
+        "Telecommunications",
+        "AI/Machine Learning",
+        "IT Services",
+        "Hardware Manufacturing"
+    ],
+    "energy": [
+        "Renewable Energy",
+        "Oil & Gas",
+        "Utilities",
+        "Energy Distribution",
+        "Energy Storage",
+        "Carbon Management",
+        "Energy Efficiency",
+        "Energy Policy"
+    ],
+    "transportation": [
+        "Public Transit",
+        "Logistics",
+        "Automotive",
+        "Aviation",
+        "Maritime",
+        "Rail",
+        "Urban Mobility",
+        "Transportation Policy"
+    ],
+    "real_estate": [
+        "Commercial Development",
+        "Residential Development",
+        "Property Management",
+        "Construction",
+        "Urban Planning",
+        "Real Estate Finance",
+        "Affordable Housing",
+        "Land Use"
+    ]
+}
+
+# Current business focus areas (multiple can be selected)
+CURRENT_FOCUS_AREAS = os.getenv("FOCUS_AREAS", "").split(",") if os.getenv("FOCUS_AREAS") else []
+
+# Additional focus-specific keywords
+FOCUS_KEYWORDS = {
+    # City Government
+    "Urban Planning": ["zoning", "land use", "development", "comprehensive plan", "master plan"],
+    "Public Safety": ["police", "fire", "emergency", "safety", "crime", "enforcement"],
+    "Infrastructure": ["roads", "bridges", "utilities", "maintenance", "capital improvements"],
+    "Parks & Recreation": ["parks", "recreation", "open space", "facilities", "programs"],
+    "Budget & Finance": ["budget", "finance", "taxes", "revenue", "expenditures", "fiscal"],
+    "Economic Development": ["economic", "business", "jobs", "growth", "incentives", "development"],
+    "Environmental Services": ["environmental", "sustainability", "waste", "water", "conservation"],
+    "Community Services": ["community", "social", "human services", "programs", "outreach"],
+    
+    # Healthcare
+    "Hospital Administration": ["operations", "staffing", "facilities", "patient care", "quality"],
+    "Medical Devices": ["devices", "equipment", "technology", "implants", "diagnostic"],
+    "Pharmaceuticals": ["drugs", "medication", "clinical trials", "prescriptions", "pharmacy"],
+    "Insurance & Billing": ["coverage", "claims", "reimbursement", "payment", "coding"],
+    "Health IT": ["electronic records", "telehealth", "digital health", "data", "systems"],
+    "Public Health": ["population health", "prevention", "community health", "epidemiology"],
+    "Clinical Services": ["patient care", "treatment", "protocols", "standards", "specialties"],
+    "Medical Research": ["clinical research", "studies", "trials", "funding", "innovation"],
+    
+    # Continue with other industries...
+    # Education
+    "K-12 Schools": ["elementary", "secondary", "district", "student achievement", "testing"],
+    "Higher Education": ["university", "college", "campus", "academic", "faculty", "tuition"],
+    "EdTech": ["learning technology", "digital", "platforms", "online learning", "software"],
+    "Special Education": ["accommodations", "IEP", "disabilities", "services", "inclusion"],
+    
+    # Add more as needed for other industries
+}
+
 # Industry-specific sources and keywords
 INDUSTRY_SOURCES = {
     "city_government": [
@@ -840,13 +959,15 @@ async def get_industry():
     return {
         "current_industry": CURRENT_INDUSTRY,
         "supported_industries": SUPPORTED_INDUSTRIES,
+        "focus_areas": INDUSTRY_FOCUS_AREAS[CURRENT_INDUSTRY],
+        "current_focus_areas": CURRENT_FOCUS_AREAS,
         "sources": INDUSTRY_SOURCES[CURRENT_INDUSTRY]
     }
 
 @app.post("/api/industry")
 async def set_industry(industry: str = Form(...)):
     """Set the current industry for personalized content"""
-    global CURRENT_INDUSTRY
+    global CURRENT_INDUSTRY, CURRENT_FOCUS_AREAS
     
     if industry not in SUPPORTED_INDUSTRIES:
         return JSONResponse(
@@ -855,7 +976,89 @@ async def set_industry(industry: str = Form(...)):
         )
     
     CURRENT_INDUSTRY = industry
-    return {"status": "success", "message": f"Industry set to: {industry}", "sources": INDUSTRY_SOURCES[industry]}
+    # Reset focus areas when industry changes
+    CURRENT_FOCUS_AREAS = []
+    
+    return {
+        "status": "success", 
+        "message": f"Industry set to: {industry}", 
+        "sources": INDUSTRY_SOURCES[industry],
+        "focus_areas": INDUSTRY_FOCUS_AREAS[industry]
+    }
+
+@app.post("/api/focus-areas")
+async def set_focus_areas(focus_areas: List[str] = Form(...)):
+    """Set the business focus areas within the selected industry"""
+    global CURRENT_FOCUS_AREAS
+    
+    # Validate focus areas against available options
+    available_focus_areas = INDUSTRY_FOCUS_AREAS[CURRENT_INDUSTRY]
+    
+    invalid_areas = [area for area in focus_areas if area not in available_focus_areas]
+    if invalid_areas:
+        return JSONResponse(
+            status_code=400,
+            content={
+                "status": "error", 
+                "message": f"Invalid focus areas: {', '.join(invalid_areas)}. Available options: {', '.join(available_focus_areas)}"
+            }
+        )
+    
+    CURRENT_FOCUS_AREAS = focus_areas
+    
+    return {
+        "status": "success",
+        "message": f"Focus areas updated: {', '.join(focus_areas)}",
+        "current_focus_areas": focus_areas
+    }
+
+def calculate_relevance_score(meeting, focus_areas=None):
+    """Calculate a meeting's relevance score based on industry and focus areas"""
+    base_score = 50  # Start with a base score
+    title = meeting.get("title", "").lower()
+    description = meeting.get("description", "").lower()
+    source = meeting.get("source", "").lower()
+    
+    # Get industry keywords
+    industry_kws = INDUSTRY_KEYWORDS.get(CURRENT_INDUSTRY, [])
+    
+    # Count industry keyword matches
+    industry_matches = sum(1 for kw in industry_kws if kw in title or kw in description)
+    base_score += min(industry_matches * 5, 20)  # Max 20 points from industry keywords
+    
+    # If no focus areas selected, return base industry score
+    if not focus_areas or not CURRENT_FOCUS_AREAS:
+        return base_score
+    
+    # Get keywords for selected focus areas
+    focus_keywords = []
+    for area in CURRENT_FOCUS_AREAS:
+        focus_keywords.extend(FOCUS_KEYWORDS.get(area, []))
+    
+    # Count focus area matches with weighted importance
+    focus_matches = 0
+    for kw in focus_keywords:
+        # Higher weight for title matches
+        if kw in title:
+            focus_matches += 2
+        # Lower weight for description matches
+        elif kw in description:
+            focus_matches += 1
+    
+    # Add focus area score (max 30 points)
+    focus_score = min(focus_matches * 3, 30)
+    
+    # Source relevance bonus (if source name matches a focus area)
+    source_bonus = 0
+    for area in CURRENT_FOCUS_AREAS:
+        if area.lower() in source.lower():
+            source_bonus = 10
+            break
+    
+    final_score = base_score + focus_score + source_bonus
+    
+    # Cap at 100
+    return min(final_score, 100)
 
 @app.get("/api/upcoming")
 async def get_upcoming_meetings(days: int = Query(30, description="Number of days to look ahead")):
@@ -889,15 +1092,21 @@ async def get_upcoming_meetings(days: int = Query(30, description="Number of day
                 "date": meeting_date.strftime("%Y-%m-%dT%H:%M:%S"),
                 "url": f"{source['base_url']}/{meeting_date.strftime('%Y/%m/%d').lower()}",
                 "description": f"This meeting will cover topics related to {', '.join(title_keywords)}.",
-                "relevance_score": random.randint(65, 95)
             }
+            
+            # Calculate relevance based on focus areas
+            meeting["relevance_score"] = calculate_relevance_score(meeting, CURRENT_FOCUS_AREAS)
             
             upcoming_meetings.append(meeting)
     
     # Sort by date
     upcoming_meetings.sort(key=lambda x: x["date"])
     
-    return {"meetings": upcoming_meetings, "industry": CURRENT_INDUSTRY}
+    return {
+        "meetings": upcoming_meetings, 
+        "industry": CURRENT_INDUSTRY,
+        "focus_areas": CURRENT_FOCUS_AREAS
+    }
 
 @app.get("/api/recent")
 async def get_recent_meetings(days: int = Query(30, description="Number of past days to look at")):
@@ -931,18 +1140,24 @@ async def get_recent_meetings(days: int = Query(30, description="Number of past 
                 "date": meeting_date.strftime("%Y-%m-%dT%H:%M:%S"),
                 "url": f"{source['base_url']}/{meeting_date.strftime('%Y/%m/%d').lower()}",
                 "description": f"This meeting covered topics related to {', '.join(title_keywords)}.",
-                "relevance_score": random.randint(65, 95),
                 "has_transcript": random.choice([True, False]),
                 "has_minutes": random.choice([True, False]),
                 "has_video": random.choice([True, False])
             }
+            
+            # Calculate relevance based on focus areas
+            meeting["relevance_score"] = calculate_relevance_score(meeting, CURRENT_FOCUS_AREAS)
             
             recent_meetings.append(meeting)
     
     # Sort by date, most recent first
     recent_meetings.sort(key=lambda x: x["date"], reverse=True)
     
-    return {"meetings": recent_meetings, "industry": CURRENT_INDUSTRY}
+    return {
+        "meetings": recent_meetings, 
+        "industry": CURRENT_INDUSTRY,
+        "focus_areas": CURRENT_FOCUS_AREAS
+    }
 
 @app.get("/api/recommended")
 async def get_recommended_meetings():
@@ -959,7 +1174,11 @@ async def get_recommended_meetings():
     # Take top 10
     recommended = all_meetings[:10]
     
-    return {"meetings": recommended, "industry": CURRENT_INDUSTRY}
+    return {
+        "meetings": recommended, 
+        "industry": CURRENT_INDUSTRY,
+        "focus_areas": CURRENT_FOCUS_AREAS
+    }
 
 # Optional port from environment variable
 port = int(os.getenv("PORT", 8002))
