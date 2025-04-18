@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Public Meeting Insights API</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', path='/styles.css') }}">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>Public Meeting Insights API</h1>
+            <p class="tagline">Extract, analyze, and search through public meeting data</p>
+        </div>
+    </header>
+
+    <main class="container">
+        <section class="intro">
+            <h2>What is DocRat?</h2>
+            <p>DocRat is an AI-powered platform that analyzes public meeting documents and transcripts to provide searchable, analyzable insights. It helps citizens, journalists, and civic organizations stay informed about local government activities.</p>
+            
+            <div class="server-status">
+                <h3>Server Status</h3>
+                <div id="status-indicator">
+                    <span class="status-badge">Checking...</span>
+                </div>
+            </div>
+        </section>
+
+        <section class="features">
+            <h2>Key Features</h2>
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <h3>📝 Meeting Extraction</h3>
+                    <p>Automatically extracts and processes public meeting data from various sources.</p>
+                    <p><strong>Endpoint:</strong> <code>/api/meetings</code></p>
+                </div>
+
+                <div class="feature-card">
+                    <h3>🔍 Smart Search</h3>
+                    <p>Semantic search capabilities to find topics across multiple meetings.</p>
+                    <p><strong>Endpoint:</strong> <code>/api/search</code></p>
+                </div>
+
+                <div class="feature-card">
+                    <h3>📊 Analysis</h3>
+                    <p>NLP-powered analysis of meeting content, sentiment, and key topics.</p>
+                    <p><strong>Endpoint:</strong> <code>/api/analysis</code></p>
+                </div>
+
+                <div class="feature-card">
+                    <h3>🔔 Alerts</h3>
+                    <p>Get notifications when specific topics are discussed in meetings.</p>
+                    <p><strong>Endpoint:</strong> <code>/api/alerts</code></p>
+                </div>
+            </div>
+        </section>
+
+        <section class="meeting-extraction">
+            <h2>Try Meeting Extraction</h2>
+            <p>Extract meeting information from a document URL or by uploading a file.</p>
+            
+            <div class="extraction-container">
+                <div class="extraction-form">
+                    <h3>Extract from URL or File</h3>
+                    <form id="extraction-form">
+                        <div class="form-group">
+                            <label for="url-input">Document URL:</label>
+                            <input type="url" id="url-input" name="url" placeholder="https://example.com/meeting-minutes.pdf">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Or upload a document:</label>
+                            <div class="file-upload">
+                                <input type="file" id="file-input" name="file" accept=".pdf,.docx,.txt">
+                                <label for="file-input" class="file-label">Choose File</label>
+                                <span id="file-name">No file chosen</span>
+                            </div>
+                        </div>
+                        
+                        <button type="submit" class="extract-btn">Extract Meeting Data</button>
+                    </form>
+                </div>
+                
+                <div class="extraction-results" id="extraction-results">
+                    <h3>Extraction Results</h3>
+                    <div class="loading" id="extraction-loading" style="display: none;">
+                        <div class="spinner"></div>
+                        <p>Processing document...</p>
+                    </div>
+                    <div id="results-container">
+                        <p class="no-results">Submit a document to see extraction results</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="api-usage">
+            <h2>Using the API</h2>
+            <div class="code-sample">
+                <h3>Sample API Request</h3>
+                <pre><code>curl -X GET "http://localhost:8002/api/meetings" \
+     -H "Content-Type: application/json"</code></pre>
+                <button class="try-btn" id="try-api">Try It</button>
+            </div>
+            <div class="response" id="api-response">
+                <h3>Response</h3>
+                <pre><code>// Response will appear here</code></pre>
+            </div>
+        </section>
+
+        <section class="docs">
+            <h2>Documentation</h2>
+            <p>Full API documentation is available via Swagger UI.</p>
+            <a href="/docs" class="btn">View API Docs</a>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2023 Public Meeting Insights API</p>
+        </div>
+    </footer>
+
+    <script src="{{ url_for('static', path='/scripts.js') }}"></script>
+</body>
+</html> 
