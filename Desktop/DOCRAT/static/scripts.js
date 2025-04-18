@@ -16,6 +16,26 @@ document.addEventListener('DOMContentLoaded', () => {
     if (extractionForm) {
         extractionForm.addEventListener('submit', handleExtractionSubmit);
     }
+    
+    // Industry form submission handler
+    const industryForm = document.getElementById('industry-form');
+    if (industryForm) {
+        industryForm.addEventListener('submit', handleIndustrySubmit);
+    }
+    
+    // Tab switching in the personalized feed
+    const tabButtons = document.querySelectorAll('.tab-btn');
+    if (tabButtons.length > 0) {
+        tabButtons.forEach(button => {
+            button.addEventListener('click', () => switchTab(button.dataset.tab));
+        });
+    }
+    
+    // Load current industry
+    loadCurrentIndustry();
+    
+    // Load personalized feed
+    loadPersonalizedFeed();
 });
 
 // Function to check server status
@@ -40,6 +60,243 @@ async function checkServerStatus() {
         statusBadge.classList.remove('online');
         console.error('Server health check failed:', error);
     }
+}
+
+// Function to load current industry
+async function loadCurrentIndustry() {
+    try {
+        const response = await fetch('/api/industry');
+        const data = await response.json();
+        
+        // Update industry dropdown
+        const industrySelect = document.getElementById('industry-select');
+        if (industrySelect) {
+            industrySelect.value = data.current_industry;
+        }
+        
+        return data.current_industry;
+    } catch (error) {
+        console.error('Failed to load industry:', error);
+        return null;
+    }
+}
+
+// Function to handle industry form submission
+async function handleIndustrySubmit(event) {
+    event.preventDefault();
+    
+    const industrySelect = document.getElementById('industry-select');
+    const industryStatus = document.getElementById('industry-status');
+    const submitButton = event.target.querySelector('button[type="submit"]');
+    
+    // Show loading state
+    submitButton.disabled = true;
+    submitButton.textContent = 'Setting...';
+    industryStatus.innerHTML = '<div class="loading-inline"><div class="spinner-small"></div> Updating industry settings...</div>';
+    
+    try {
+        // Send industry to server
+        const formData = new FormData();
+        formData.append('industry', industrySelect.value);
+        
+        const response = await fetch('/api/industry', {
+            method: 'POST',
+            body: formData
+        });
+        
+        const data = await response.json();
+        
+        if (response.ok) {
+            industryStatus.innerHTML = '<div class="success-message">Industry updated successfully!</div>';
+            
+            // Reload personalized feed with new industry
+            loadPersonalizedFeed();
+            
+            setTimeout(() => {
+                industryStatus.innerHTML = '';
+            }, 3000);
+        } else {
+            industryStatus.innerHTML = `<div class="error-message">${data.message || 'Failed to update industry.'}</div>`;
+        }
+    } catch (error) {
+        console.error('Industry submission error:', error);
+        industryStatus.innerHTML = `<div class="error-message">Error: ${error.message}</div>`;
+    } finally {
+        // Reset button state
+        submitButton.disabled = false;
+        submitButton.textContent = 'Set Industry';
+    }
+}
+
+// Function to load personalized feed
+async function loadPersonalizedFeed() {
+    const loadingElement = document.getElementById('feed-loading');
+    
+    if (loadingElement) {
+        loadingElement.style.display = 'flex';
+    }
+    
+    // Load the active tab first
+    const activeTab = document.querySelector('.tab-btn.active');
+    if (activeTab) {
+        const tabName = activeTab.dataset.tab;
+        await loadTabContent(tabName);
+    }
+    
+    // Hide loading indicator
+    if (loadingElement) {
+        loadingElement.style.display = 'none';
+    }
+}
+
+// Function to switch between tabs
+async function switchTab(tabName) {
+    // Update active tab button
+    const tabButtons = document.querySelectorAll('.tab-btn');
+    tabButtons.forEach(button => {
+        if (button.dataset.tab === tabName) {
+            button.classList.add('active');
+        } else {
+            button.classList.remove('active');
+        }
+    });
+    
+    // Update active tab pane
+    const tabPanes = document.querySelectorAll('.tab-pane');
+    tabPanes.forEach(pane => {
+        if (pane.id === `${tabName}-feed`) {
+            pane.classList.add('active');
+        } else {
+            pane.classList.remove('active');
+        }
+    });
+    
+    // Load tab content if not already loaded
+    const tabContent = document.querySelector(`#${tabName}-feed .meetings-list`);
+    if (tabContent && tabContent.children.length === 0) {
+        // Show loading indicator
+        const loadingElement = document.getElementById('feed-loading');
+        if (loadingElement) {
+            loadingElement.style.display = 'flex';
+        }
+        
+        await loadTabContent(tabName);
+        
+        // Hide loading indicator
+        if (loadingElement) {
+            loadingElement.style.display = 'none';
+        }
+    }
+}
+
+// Function to load tab content
+async function loadTabContent(tabName) {
+    try {
+        let endpoint;
+        switch (tabName) {
+            case 'recommended':
+                endpoint = '/api/recommended';
+                break;
+            case 'upcoming':
+                endpoint = '/api/upcoming';
+                break;
+            case 'recent':
+                endpoint = '/api/recent';
+                break;
+            default:
+                throw new Error(`Unknown tab: ${tabName}`);
+        }
+        
+        const response = await fetch(endpoint);
+        const data = await response.json();
+        
+        // Render meetings in the appropriate tab
+        const meetingsContainer = document.querySelector(`#${tabName}-feed .meetings-list`);
+        if (meetingsContainer) {
+            renderMeetings(data.meetings, meetingsContainer);
+        }
+    } catch (error) {
+        console.error(`Error loading ${tabName} feed:`, error);
+        const meetingsContainer = document.querySelector(`#${tabName}-feed .meetings-list`);
+        if (meetingsContainer) {
+            meetingsContainer.innerHTML = `<div class="error-message">Failed to load ${tabName} meetings: ${error.message}</div>`;
+        }
+    }
+}
+
+// Function to render meetings in a container
+function renderMeetings(meetings, container) {
+    if (meetings.length === 0) {
+        container.innerHTML = '<div class="no-meetings">No meetings found for this category.</div>';
+        return;
+    }
+    
+    let html = '';
+    
+    meetings.forEach(meeting => {
+        // Format date
+        const date = new Date(meeting.date);
+        const formattedDate = date.toLocaleDateString('en-US', {
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric'
+        });
+        const formattedTime = date.toLocaleTimeString('en-US', {
+            hour: '2-digit',
+            minute: '2-digit'
+        });
+        
+        // Create relevance badge CSS class
+        let relevanceClass = 'low-relevance';
+        if (meeting.relevance_score >= 85) {
+            relevanceClass = 'high-relevance';
+        } else if (meeting.relevance_score >= 70) {
+            relevanceClass = 'medium-relevance';
+        }
+        
+        // Create HTML for the meeting card
+        html += `
+            <div class="meeting-item">
+                <div class="meeting-header">
+                    <h4 class="meeting-title">${meeting.title}</h4>
+                    <span class="relevance-badge ${relevanceClass}">${meeting.relevance_score}% relevant</span>
+                </div>
+                <div class="meeting-meta">
+                    <span class="meeting-source">${meeting.source}</span>
+                    <span class="meeting-date">📅 ${formattedDate} at ${formattedTime}</span>
+                </div>
+                <p class="meeting-description">${meeting.description}</p>
+                
+                <div class="meeting-actions">
+                    <a href="${meeting.url}" target="_blank" class="view-source-btn">View Source</a>
+                    <button class="extract-btn" data-url="${meeting.url}">Extract Insights</button>
+                </div>
+            </div>
+        `;
+    });
+    
+    container.innerHTML = html;
+    
+    // Add event listeners for extract buttons
+    const extractButtons = container.querySelectorAll('.extract-btn');
+    extractButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            const url = button.dataset.url;
+            if (url) {
+                // Populate the URL input in the extraction form
+                const urlInput = document.getElementById('url-input');
+                if (urlInput) {
+                    urlInput.value = url;
+                    
+                    // Scroll to the extraction form
+                    const extractionForm = document.getElementById('extraction-form');
+                    if (extractionForm) {
+                        extractionForm.scrollIntoView({ behavior: 'smooth' });
+                    }
+                }
+            }
+        });
+    });
 }
 
 // Function to demonstrate API call

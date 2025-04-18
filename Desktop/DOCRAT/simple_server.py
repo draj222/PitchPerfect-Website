@@ -1,21 +1,22 @@
-from fastapi import FastAPI, Request, Form, UploadFile, File
+from fastapi import FastAPI, Request, Form, UploadFile, File, Query
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
-from fastapi.responses import JSONResponse
+from fastapi.responses import JSONResponse, HTMLResponse
 import uvicorn
 import os
 import json
 import re
 import ssl
 import certifi
-from typing import Optional, Dict, List
+from typing import Optional, Dict, List, Any
 from datetime import datetime, timedelta
 import random
 from dotenv import load_dotenv
 import urllib.parse
 import traceback
 import platform
+import time
 
 # Import pytube for YouTube video extraction
 try:
@@ -148,6 +149,81 @@ mock_meetings = [
         }
     }
 ]
+
+# Load configuration
+load_dotenv()
+
+# Industry configuration
+SUPPORTED_INDUSTRIES = [
+    "city_government",
+    "healthcare",
+    "education",
+    "finance",
+    "technology",
+    "energy",
+    "transportation",
+    "real_estate"
+]
+
+# Default to city government if not specified
+DEFAULT_INDUSTRY = "city_government"
+CURRENT_INDUSTRY = os.getenv("INDUSTRY", DEFAULT_INDUSTRY)
+
+# Industry-specific sources and keywords
+INDUSTRY_SOURCES = {
+    "city_government": [
+        {"name": "City Council", "base_url": "https://www.citycouncil.gov/meetings", "frequency": "weekly"},
+        {"name": "Planning Commission", "base_url": "https://www.planning.gov/hearings", "frequency": "bi-weekly"},
+        {"name": "Budget Committee", "base_url": "https://www.finance.gov/budget", "frequency": "monthly"}
+    ],
+    "healthcare": [
+        {"name": "Hospital Board", "base_url": "https://www.centralhospital.org/board", "frequency": "monthly"},
+        {"name": "Public Health Commission", "base_url": "https://www.publichealthdept.gov/meetings", "frequency": "bi-weekly"},
+        {"name": "Medical Ethics Committee", "base_url": "https://www.medicalboard.org/ethics", "frequency": "quarterly"}
+    ],
+    "education": [
+        {"name": "School Board", "base_url": "https://www.schooldistrict.edu/board", "frequency": "bi-weekly"},
+        {"name": "Education Committee", "base_url": "https://www.stateeducation.gov/committee", "frequency": "monthly"},
+        {"name": "University Regents", "base_url": "https://www.stateuniversity.edu/regents", "frequency": "quarterly"}
+    ],
+    "finance": [
+        {"name": "Financial Oversight Committee", "base_url": "https://www.financialoversight.gov/meetings", "frequency": "monthly"},
+        {"name": "Banking Commission", "base_url": "https://www.bankingcommission.gov/public", "frequency": "monthly"},
+        {"name": "Investment Board", "base_url": "https://www.investmentboard.org/meetings", "frequency": "bi-weekly"}
+    ],
+    "technology": [
+        {"name": "Tech Policy Forum", "base_url": "https://www.techpolicy.org/forum", "frequency": "monthly"},
+        {"name": "Data Privacy Board", "base_url": "https://www.dataprivacy.gov/meetings", "frequency": "monthly"},
+        {"name": "Innovation Council", "base_url": "https://www.innovationcouncil.org/public", "frequency": "bi-weekly"}
+    ],
+    "energy": [
+        {"name": "Public Utilities Commission", "base_url": "https://www.puc.gov/hearings", "frequency": "bi-weekly"},
+        {"name": "Energy Board", "base_url": "https://www.energyboard.gov/meetings", "frequency": "monthly"},
+        {"name": "Environmental Review Panel", "base_url": "https://www.environmentalpanel.org/hearings", "frequency": "monthly"}
+    ],
+    "transportation": [
+        {"name": "Transit Authority", "base_url": "https://www.transit.gov/board", "frequency": "monthly"},
+        {"name": "Transportation Commission", "base_url": "https://www.transportation.gov/commission", "frequency": "bi-weekly"},
+        {"name": "Infrastructure Committee", "base_url": "https://www.infrastructure.gov/committee", "frequency": "monthly"}
+    ],
+    "real_estate": [
+        {"name": "Zoning Board", "base_url": "https://www.zoning.gov/hearings", "frequency": "bi-weekly"},
+        {"name": "Housing Authority", "base_url": "https://www.housingauthority.gov/board", "frequency": "monthly"},
+        {"name": "Land Use Commission", "base_url": "https://www.landuse.gov/commission", "frequency": "monthly"}
+    ]
+}
+
+# Industry-specific keywords for prioritization
+INDUSTRY_KEYWORDS = {
+    "city_government": ["budget", "ordinance", "zoning", "public works", "city services", "council", "mayor", "resolution"],
+    "healthcare": ["patient care", "medical staff", "health policy", "insurance", "public health", "clinical", "facilities"],
+    "education": ["curriculum", "students", "faculty", "schools", "testing", "education policy", "budget", "programs"],
+    "finance": ["budget", "investment", "fiscal", "revenue", "expenditure", "audit", "bonds", "financial report"],
+    "technology": ["data", "privacy", "cybersecurity", "digital", "innovation", "technology policy", "broadband"],
+    "energy": ["utilities", "renewable", "grid", "generation", "transmission", "rates", "conservation", "emissions"],
+    "transportation": ["transit", "roads", "infrastructure", "public transportation", "mobility", "traffic", "planning"],
+    "real_estate": ["zoning", "development", "housing", "property", "land use", "building codes", "permits", "planning"]
+}
 
 # Root endpoint - serve HTML
 @app.get("/")
@@ -755,6 +831,135 @@ async def set_openai_key(api_key: str = Form(...)):
             status_code=400,
             content={"status": "error", "message": f"Invalid API key: {str(e)}"}
         )
+
+# New endpoints for industry configuration and real-time updates
+
+@app.get("/api/industry")
+async def get_industry():
+    """Return the current industry configuration and available options"""
+    return {
+        "current_industry": CURRENT_INDUSTRY,
+        "supported_industries": SUPPORTED_INDUSTRIES,
+        "sources": INDUSTRY_SOURCES[CURRENT_INDUSTRY]
+    }
+
+@app.post("/api/industry")
+async def set_industry(industry: str = Form(...)):
+    """Set the current industry for personalized content"""
+    global CURRENT_INDUSTRY
+    
+    if industry not in SUPPORTED_INDUSTRIES:
+        return JSONResponse(
+            status_code=400,
+            content={"status": "error", "message": f"Unsupported industry. Choose from: {', '.join(SUPPORTED_INDUSTRIES)}"}
+        )
+    
+    CURRENT_INDUSTRY = industry
+    return {"status": "success", "message": f"Industry set to: {industry}", "sources": INDUSTRY_SOURCES[industry]}
+
+@app.get("/api/upcoming")
+async def get_upcoming_meetings(days: int = Query(30, description="Number of days to look ahead")):
+    """Get upcoming meetings based on the configured industry"""
+    today = datetime.now()
+    end_date = today + timedelta(days=days)
+    
+    # This would typically connect to a real data source or API
+    # For demo purposes, we'll generate mock upcoming meetings
+    sources = INDUSTRY_SOURCES[CURRENT_INDUSTRY]
+    keywords = INDUSTRY_KEYWORDS[CURRENT_INDUSTRY]
+    
+    upcoming_meetings = []
+    
+    for source in sources:
+        # Generate 1-3 upcoming meetings for each source
+        for _ in range(random.randint(1, 3)):
+            # Random date within the specified range
+            meeting_date = today + timedelta(days=random.randint(1, days))
+            
+            # Generate a realistic title using industry keywords
+            title_keywords = random.sample(keywords, min(3, len(keywords)))
+            meeting_type = random.choice(["Regular Meeting", "Special Session", "Public Hearing", "Workshop"])
+            title = f"{source['name']} {meeting_type}: {', '.join(title_keywords).title()}"
+            
+            # Generate meeting details
+            meeting = {
+                "id": random.randint(1000, 9999),
+                "title": title,
+                "source": source["name"],
+                "date": meeting_date.strftime("%Y-%m-%dT%H:%M:%S"),
+                "url": f"{source['base_url']}/{meeting_date.strftime('%Y/%m/%d').lower()}",
+                "description": f"This meeting will cover topics related to {', '.join(title_keywords)}.",
+                "relevance_score": random.randint(65, 95)
+            }
+            
+            upcoming_meetings.append(meeting)
+    
+    # Sort by date
+    upcoming_meetings.sort(key=lambda x: x["date"])
+    
+    return {"meetings": upcoming_meetings, "industry": CURRENT_INDUSTRY}
+
+@app.get("/api/recent")
+async def get_recent_meetings(days: int = Query(30, description="Number of past days to look at")):
+    """Get recent meetings based on the configured industry"""
+    today = datetime.now()
+    start_date = today - timedelta(days=days)
+    
+    # This would typically connect to a real data source or API
+    # For demo purposes, we'll generate mock recent meetings
+    sources = INDUSTRY_SOURCES[CURRENT_INDUSTRY]
+    keywords = INDUSTRY_KEYWORDS[CURRENT_INDUSTRY]
+    
+    recent_meetings = []
+    
+    for source in sources:
+        # Generate 1-5 recent meetings for each source
+        for _ in range(random.randint(1, 5)):
+            # Random date within the specified range
+            meeting_date = today - timedelta(days=random.randint(1, days))
+            
+            # Generate a realistic title using industry keywords
+            title_keywords = random.sample(keywords, min(3, len(keywords)))
+            meeting_type = random.choice(["Regular Meeting", "Special Session", "Public Hearing", "Workshop"])
+            title = f"{source['name']} {meeting_type}: {', '.join(title_keywords).title()}"
+            
+            # Generate meeting details
+            meeting = {
+                "id": random.randint(1000, 9999),
+                "title": title,
+                "source": source["name"],
+                "date": meeting_date.strftime("%Y-%m-%dT%H:%M:%S"),
+                "url": f"{source['base_url']}/{meeting_date.strftime('%Y/%m/%d').lower()}",
+                "description": f"This meeting covered topics related to {', '.join(title_keywords)}.",
+                "relevance_score": random.randint(65, 95),
+                "has_transcript": random.choice([True, False]),
+                "has_minutes": random.choice([True, False]),
+                "has_video": random.choice([True, False])
+            }
+            
+            recent_meetings.append(meeting)
+    
+    # Sort by date, most recent first
+    recent_meetings.sort(key=lambda x: x["date"], reverse=True)
+    
+    return {"meetings": recent_meetings, "industry": CURRENT_INDUSTRY}
+
+@app.get("/api/recommended")
+async def get_recommended_meetings():
+    """Get recommended meetings based on the configured industry and relevance"""
+    # Combine recent and upcoming, then sort by relevance score
+    recent_response = await get_recent_meetings(days=60)
+    upcoming_response = await get_upcoming_meetings(days=30)
+    
+    all_meetings = recent_response["meetings"] + upcoming_response["meetings"]
+    
+    # Sort by relevance score
+    all_meetings.sort(key=lambda x: x["relevance_score"], reverse=True)
+    
+    # Take top 10
+    recommended = all_meetings[:10]
+    
+    return {"meetings": recommended, "industry": CURRENT_INDUSTRY}
 
 # Optional port from environment variable
 port = int(os.getenv("PORT", 8002))

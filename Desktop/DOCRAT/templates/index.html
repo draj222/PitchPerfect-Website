@@ -26,6 +26,55 @@
                     <span class="status-badge">Checking...</span>
                 </div>
             </div>
+            
+            <div class="industry-selector">
+                <h3>Industry Personalization</h3>
+                <p>Select your industry to get personalized meeting recommendations.</p>
+                <form id="industry-form">
+                    <select id="industry-select" name="industry" class="industry-dropdown">
+                        <option value="city_government">City Government</option>
+                        <option value="healthcare">Healthcare</option>
+                        <option value="education">Education</option>
+                        <option value="finance">Finance</option>
+                        <option value="technology">Technology</option>
+                        <option value="energy">Energy</option>
+                        <option value="transportation">Transportation</option>
+                        <option value="real_estate">Real Estate</option>
+                    </select>
+                    <button type="submit" class="industry-btn">Set Industry</button>
+                </form>
+                <div id="industry-status"></div>
+            </div>
+        </section>
+
+        <section class="personalized-feed">
+            <h2>Your Personalized Meeting Feed</h2>
+            <p>Meetings and public hearings customized to your industry.</p>
+            
+            <div class="feed-tabs">
+                <button class="tab-btn active" data-tab="recommended">Recommended</button>
+                <button class="tab-btn" data-tab="upcoming">Upcoming</button>
+                <button class="tab-btn" data-tab="recent">Recent</button>
+            </div>
+            
+            <div class="feed-content">
+                <div class="feed-loading" id="feed-loading">
+                    <div class="spinner"></div>
+                    <p>Loading your personalized feed...</p>
+                </div>
+                
+                <div class="tab-pane active" id="recommended-feed">
+                    <div class="meetings-list"></div>
+                </div>
+                
+                <div class="tab-pane" id="upcoming-feed">
+                    <div class="meetings-list"></div>
+                </div>
+                
+                <div class="tab-pane" id="recent-feed">
+                    <div class="meetings-list"></div>
+                </div>
+            </div>
         </section>
 
         <section class="features">

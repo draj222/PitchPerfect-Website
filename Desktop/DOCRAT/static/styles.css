@@ -678,4 +678,296 @@ footer {
 
 /* API key section styles removed as functionality is now handled by the backend */
 
-/* Any additional styles below... */ 
+/* Any additional styles below... */
+
+/* Industry Selector */
+.industry-selector {
+    margin-top: 30px;
+    padding: 20px;
+    background-color: var(--light-gray);
+    border-radius: 8px;
+    border-left: 4px solid var(--primary-color);
+}
+
+#industry-form {
+    display: flex;
+    align-items: center;
+    margin-top: 15px;
+    gap: 10px;
+}
+
+.industry-dropdown {
+    flex: 1;
+    padding: 10px 15px;
+    border: 1px solid var(--medium-gray);
+    border-radius: 4px;
+    font-size: 16px;
+    background-color: white;
+}
+
+.industry-btn {
+    padding: 10px 20px;
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    border-radius: 4px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.industry-btn:hover {
+    background-color: var(--primary-dark);
+}
+
+#industry-status {
+    margin-top: 10px;
+    font-size: 0.9rem;
+}
+
+/* Personalized Feed */
+.personalized-feed {
+    margin-bottom: 60px;
+}
+
+.feed-tabs {
+    display: flex;
+    border-bottom: 2px solid var(--medium-gray);
+    margin-bottom: 20px;
+}
+
+.tab-btn {
+    padding: 10px 20px;
+    background: none;
+    border: none;
+    font-weight: 600;
+    color: var(--dark-gray);
+    cursor: pointer;
+    position: relative;
+    transition: color 0.3s;
+}
+
+.tab-btn:hover {
+    color: var(--primary-color);
+}
+
+.tab-btn.active {
+    color: var(--primary-color);
+}
+
+.tab-btn.active::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background-color: var(--primary-color);
+}
+
+.feed-content {
+    position: relative;
+    min-height: 200px;
+}
+
+.feed-loading {
+    position: absolute;
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(255, 255, 255, 0.8);
+    z-index: 10;
+}
+
+.tab-pane {
+    display: none;
+}
+
+.tab-pane.active {
+    display: block;
+}
+
+.meetings-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 20px;
+}
+
+.meeting-item {
+    background-color: white;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.meeting-item:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.12);
+}
+
+.meeting-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 10px;
+}
+
+.meeting-title {
+    font-size: 1.1rem;
+    margin: 0;
+    color: var(--primary-dark);
+    flex: 1;
+    margin-right: 10px;
+}
+
+.relevance-badge {
+    display: inline-block;
+    padding: 3px 8px;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: white;
+    white-space: nowrap;
+}
+
+.high-relevance {
+    background-color: #4caf50;
+}
+
+.medium-relevance {
+    background-color: #ff9800;
+}
+
+.low-relevance {
+    background-color: #9e9e9e;
+}
+
+.meeting-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 15px;
+    font-size: 0.85rem;
+    color: var(--dark-gray);
+}
+
+.meeting-source {
+    font-weight: 600;
+    color: var(--primary-color);
+}
+
+.meeting-description {
+    font-size: 0.9rem;
+    margin-bottom: 15px;
+    color: var(--text-color);
+    line-height: 1.5;
+}
+
+.meeting-actions {
+    display: flex;
+    gap: 10px;
+}
+
+.view-source-btn, .extract-btn {
+    padding: 8px 12px;
+    border-radius: 4px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    text-align: center;
+    text-decoration: none;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.view-source-btn {
+    background-color: var(--light-gray);
+    color: var(--text-color);
+    border: 1px solid var(--medium-gray);
+}
+
+.view-source-btn:hover {
+    background-color: var(--medium-gray);
+}
+
+.extract-btn {
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+}
+
+.extract-btn:hover {
+    background-color: var(--primary-dark);
+}
+
+.no-meetings {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 40px;
+    color: var(--dark-gray);
+    background-color: var(--light-gray);
+    border-radius: 8px;
+    font-style: italic;
+}
+
+.loading-inline {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: var(--dark-gray);
+}
+
+.spinner-small {
+    width: 16px;
+    height: 16px;
+    border: 2px solid rgba(0, 0, 0, 0.1);
+    border-radius: 50%;
+    border-top-color: var(--primary-color);
+    animation: spin 1s linear infinite;
+}
+
+.success-message {
+    color: var(--success-color);
+    padding: 8px;
+    border-radius: 4px;
+    background-color: rgba(76, 175, 80, 0.1);
+}
+
+.error-message {
+    color: var(--error-color);
+    padding: 8px;
+    border-radius: 4px;
+    background-color: rgba(244, 67, 54, 0.1);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .meetings-list {
+        grid-template-columns: 1fr;
+    }
+    
+    #industry-form {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    
+    .industry-dropdown, .industry-btn {
+        width: 100%;
+        margin-bottom: 10px;
+    }
+    
+    .feed-tabs {
+        flex-wrap: wrap;
+    }
+    
+    .tab-btn {
+        flex: 1;
+        text-align: center;
+        padding: 10px 5px;
+    }
+} 
