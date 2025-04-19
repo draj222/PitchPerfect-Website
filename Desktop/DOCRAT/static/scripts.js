@@ -2,9 +2,6 @@ document.addEventListener('DOMContentLoaded', () => {
     // Check server status on page load
     checkServerStatus();
     
-    // Set up button event listeners
-    document.getElementById('try-api').addEventListener('click', tryApiCall);
-    
     // Set up file input change handler
     const fileInput = document.getElementById('file-input');
     if (fileInput) {
@@ -396,32 +393,6 @@ function renderMeetings(meetings, container) {
             }
         });
     });
-}
-
-// Function to demonstrate API call
-async function tryApiCall() {
-    const responseElement = document.getElementById('api-response').querySelector('code');
-    const tryButton = document.getElementById('try-api');
-    
-    // Change button state
-    tryButton.textContent = 'Loading...';
-    tryButton.disabled = true;
-    
-    try {
-        // Try to call the /api endpoint
-        const response = await fetch('/api');
-        const data = await response.json();
-        
-        // Display formatted JSON response
-        responseElement.textContent = JSON.stringify(data, null, 2);
-    } catch (error) {
-        responseElement.textContent = `Error: ${error.message}`;
-        console.error('API call failed:', error);
-    } finally {
-        // Reset button state
-        tryButton.textContent = 'Try It';
-        tryButton.disabled = false;
-    }
 }
 
 // Function to update file name display

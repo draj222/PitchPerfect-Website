@@ -76,9 +76,16 @@ else:
     openai_client = "mock"  # Use a string to indicate mock mode
 
 # Create FastAPI app
-app = FastAPI(title=os.getenv("API_TITLE", "Public Meeting Insights API"))
+app = FastAPI(
+    title=os.getenv("API_TITLE", "Public Meeting Insights API"),
+    description="AI-powered public meeting analysis and search platform",
+    version="1.0.0",
+    docs_url=None,  # Disable Swagger UI
+    redoc_url=None,  # Disable ReDoc UI
+    openapi_url=None  # Disable OpenAPI schema
+)
 
-# CORS setup
+# Configure CORS
 allowed_origins = os.getenv("ALLOWED_ORIGINS", "http://localhost:3000").split(",")
 app.add_middleware(
     CORSMiddleware,
@@ -92,10 +99,10 @@ app.add_middleware(
 os.makedirs("static", exist_ok=True)
 os.makedirs("templates", exist_ok=True)
 
-# Mount static files
+# Mount static files directory
 app.mount("/static", StaticFiles(directory="static"), name="static")
 
-# Setup templates
+# Configure templates
 templates = Jinja2Templates(directory="templates")
 
 # Mock data for meetings
@@ -345,14 +352,17 @@ INDUSTRY_KEYWORDS = {
 }
 
 # Root endpoint - serve HTML
-@app.get("/")
+@app.get("/", response_class=HTMLResponse)
 async def root(request: Request):
-    return templates.TemplateResponse("index.html", {"request": request})
+    return templates.TemplateResponse(
+        "index.html", 
+        {"request": request}
+    )
 
-# API root endpoint
+# API Root endpoint
 @app.get("/api")
 async def api_root():
-    return {"message": "Welcome to the Public Meeting Insights API"}
+    return {"message": f"Welcome to the {os.getenv('API_TITLE', 'Public Meeting Insights API')}"}
 
 # Health check endpoint
 @app.get("/health")
