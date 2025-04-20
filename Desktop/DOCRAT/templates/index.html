@@ -3,203 +3,691 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Public Meeting Insights API</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="{{ url_for('static', path='/styles.css') }}">
+    <title>Sustainability Monitoring Platform</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+    <link rel="stylesheet" href="/static/styles.css">
 </head>
 <body>
-    <header>
-        <div class="container">
-            <h1>Public Meeting Insights API</h1>
-            <p class="tagline">Extract, analyze, and search through public meeting data</p>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">
+                <i class="bi bi-globe"></i> EcoInsight Dashboard
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="#" data-section="dashboard">Dashboard</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" data-section="meetings">Meeting Insights</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" data-section="permits">Permits & Compliance</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" data-section="sensors">Environmental Sensors</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" data-section="satellite">Satellite Monitoring</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" data-section="news">Environmental News</a>
+                    </li>
+                </ul>
+            </div>
         </div>
-    </header>
+    </nav>
 
-    <main class="container">
-        <section class="intro">
-            <h2>What is DocRat?</h2>
-            <p>DocRat is an AI-powered platform that analyzes public meeting documents and transcripts to provide searchable, analyzable insights. It helps citizens, journalists, and civic organizations stay informed about local government activities.</p>
-            
-            <div class="server-status">
-                <h3>Server Status</h3>
-                <div id="status-indicator">
-                    <span class="status-badge">Checking...</span>
+    <!-- Main Content -->
+    <div class="container-fluid content-wrapper py-4">
+        <!-- Dashboard Section -->
+        <section id="dashboard" class="section active-section">
+            <div class="row mb-4">
+                <div class="col-md-12">
+                    <h2>Sustainability Dashboard</h2>
+                    <p class="text-muted">Comprehensive monitoring of environmental indicators and compliance metrics</p>
                 </div>
             </div>
             
-            <div class="industry-selector">
-                <h3>Industry Personalization</h3>
-                <p>Select your industry to get personalized meeting recommendations.</p>
-                <form id="industry-form">
-                    <select id="industry-select" name="industry" class="industry-dropdown">
-                        <option value="city_government">City Government</option>
-                        <option value="healthcare">Healthcare</option>
-                        <option value="education">Education</option>
-                        <option value="finance">Finance</option>
-                        <option value="technology">Technology</option>
-                        <option value="energy">Energy</option>
-                        <option value="transportation">Transportation</option>
-                        <option value="real_estate">Real Estate</option>
-                    </select>
-                    <button type="submit" class="industry-btn">Set Industry</button>
-                </form>
-                <div id="industry-status"></div>
-                
-                <div class="focus-areas-section">
-                    <h4>Business Focus Areas</h4>
-                    <p>Select specific areas your business focuses on for more relevant results.</p>
-                    <form id="focus-areas-form">
-                        <div class="focus-areas-container" id="focus-areas-container">
-                            <!-- Focus area checkboxes will be added here dynamically -->
-                            <div class="loading-inline"><div class="spinner-small"></div> Loading focus areas...</div>
+            <!-- Stats Cards -->
+            <div class="row mb-4">
+                <div class="col-md-3">
+                    <div class="stat-card">
+                        <div class="stat-value">85</div>
+                        <div class="stat-label">Overall Sustainability Score</div>
+                        <div class="trend up">+3% from last month</div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="stat-card">
+                        <div class="stat-value">14</div>
+                        <div class="stat-label">Active Permits</div>
+                        <div class="trend stable">No change</div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="stat-card">
+                        <div class="stat-value">28</div>
+                        <div class="stat-label">Environmental Commitments</div>
+                        <div class="trend up">+5 from last quarter</div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="stat-card">
+                        <div class="stat-value">93%</div>
+                        <div class="stat-label">Compliance Rate</div>
+                        <div class="trend down">-2% from last month</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Charts -->
+            <div class="row mb-4">
+                <div class="col-md-6">
+                    <div class="card shadow-sm">
+                        <div class="card-header">
+                            Sustainability Score Trend
                         </div>
-                        <button type="submit" class="focus-areas-btn">Update Focus Areas</button>
-                    </form>
-                    <div id="focus-areas-status"></div>
-                </div>
-            </div>
-        </section>
-
-        <section class="personalized-feed">
-            <h2>Your Personalized Meeting Feed</h2>
-            <p>Meetings and public hearings customized to your industry.</p>
-            
-            <div class="feed-tabs">
-                <button class="tab-btn active" data-tab="recommended">Recommended</button>
-                <button class="tab-btn" data-tab="upcoming">Upcoming</button>
-                <button class="tab-btn" data-tab="recent">Recent</button>
-            </div>
-            
-            <div class="feed-content">
-                <div class="feed-loading" id="feed-loading">
-                    <div class="spinner"></div>
-                    <p>Loading your personalized feed...</p>
-                </div>
-                
-                <div class="tab-pane active" id="recommended-feed">
-                    <div class="meetings-list"></div>
-                </div>
-                
-                <div class="tab-pane" id="upcoming-feed">
-                    <div class="meetings-list"></div>
-                </div>
-                
-                <div class="tab-pane" id="recent-feed">
-                    <div class="meetings-list"></div>
-                </div>
-            </div>
-        </section>
-
-        <section class="features">
-            <h2>Key Features</h2>
-            <div class="feature-grid">
-                <div class="feature-card">
-                    <h3>📝 Meeting Extraction</h3>
-                    <p>Automatically extracts and processes public meeting data from various sources.</p>
-                    <p><strong>Endpoint:</strong> <code>/api/meetings</code></p>
-                </div>
-
-                <div class="feature-card">
-                    <h3>🔍 Smart Search</h3>
-                    <p>Semantic search capabilities to find topics across multiple meetings.</p>
-                    <p><strong>Endpoint:</strong> <code>/api/search</code></p>
-                </div>
-
-                <div class="feature-card">
-                    <h3>📊 Analysis</h3>
-                    <p>NLP-powered analysis of meeting content, sentiment, and key topics.</p>
-                    <p><strong>Endpoint:</strong> <code>/api/analysis</code></p>
-                </div>
-
-                <div class="feature-card">
-                    <h3>🔔 Alerts</h3>
-                    <p>Get notifications when specific topics are discussed in meetings.</p>
-                    <p><strong>Endpoint:</strong> <code>/api/alerts</code></p>
-                </div>
-            </div>
-        </section>
-
-        <section class="meeting-extraction">
-            <h2>Try Meeting Extraction</h2>
-            <p>Extract meeting information from a document URL or by uploading a file.</p>
-            
-            <div class="extraction-container">
-                <div class="extraction-form">
-                    <h3>Extract from URL or File</h3>
-                    <form id="extraction-form">
-                        <div class="form-group">
-                            <label for="url-input">Document URL:</label>
-                            <input type="url" id="url-input" name="url" placeholder="https://example.com/meeting-minutes.pdf">
+                        <div class="card-body">
+                            <canvas id="sustainability-trend" height="250"></canvas>
                         </div>
-                        
-                        <div class="form-group">
-                            <label>Or upload a document:</label>
-                            <div class="file-upload">
-                                <input type="file" id="file-input" name="file" accept=".pdf,.docx,.txt">
-                                <label for="file-input" class="file-label">Choose File</label>
-                                <span id="file-name">No file chosen</span>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="card shadow-sm">
+                        <div class="card-header">
+                            Category Performance
+                        </div>
+                        <div class="card-body">
+                            <canvas id="category-performance" height="250"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Map and Insights -->
+            <div class="row">
+                <div class="col-md-7">
+                    <div class="card shadow-sm">
+                        <div class="card-header">
+                            Geographic Overview
+                        </div>
+                        <div class="card-body">
+                            <div id="map" style="height: 400px;"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-5">
+                    <div class="card shadow-sm">
+                        <div class="card-header">
+                            Latest Insights
+                        </div>
+                        <div class="card-body p-0">
+                            <div class="insights-container">
+                                <!-- Insights will be populated here by JavaScript -->
                             </div>
                         </div>
-                        
-                        <button type="submit" class="extract-btn">Extract Meeting Data</button>
-                    </form>
-                </div>
-                
-                <div class="extraction-results" id="extraction-results">
-                    <h3>Extraction Results</h3>
-                    <div class="loading" id="extraction-loading" style="display: none;">
-                        <div class="spinner"></div>
-                        <p>Processing document...</p>
-                    </div>
-                    <div id="results-container">
-                        <p class="no-results">Submit a document to see extraction results</p>
                     </div>
                 </div>
             </div>
         </section>
-
-        <section class="product-benefits">
-            <h2>Benefits for Your Organization</h2>
-            <div class="benefits-grid">
-                <div class="benefit-card">
-                    <h3>🕒 Save Time</h3>
-                    <p>Reduce meeting review time by up to 80% with AI-powered summarization and key point extraction.</p>
+        
+        <!-- Meetings Section -->
+        <section id="meetings" class="section">
+            <div class="row mb-4">
+                <div class="col-md-12">
+                    <h2>Meeting Insights</h2>
+                    <p class="text-muted">Analysis of public meetings related to environmental policies and initiatives</p>
                 </div>
-                
-                <div class="benefit-card">
-                    <h3>📊 Increase Visibility</h3>
-                    <p>Never miss important discussions or decisions with automated tracking of key topics across all meetings.</p>
+            </div>
+            
+            <div class="row mb-4">
+                <div class="col">
+                    <div class="card shadow-sm">
+                        <div class="card-header">
+                            Recent Meetings
+                        </div>
+                        <div class="card-body">
+                            <table id="meetings-table" class="table">
+                                <thead>
+                                    <tr>
+                                        <th>Date</th>
+                                        <th>Meeting</th>
+                                        <th>Commitments</th>
+                                        <th>Score</th>
+                                        <th>Topics</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <!-- Will be populated by JavaScript -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
                 </div>
-                
-                <div class="benefit-card">
-                    <h3>🔍 Find What Matters</h3>
-                    <p>Powerful search capabilities let you locate specific topics discussed across months of meetings in seconds.</p>
+            </div>
+            
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="card shadow-sm">
+                        <div class="card-header">
+                            Commitment Tracking
+                        </div>
+                        <div class="card-body">
+                            <p>Track implementation status of commitments made in public meetings.</p>
+                            <div class="progress mb-3">
+                                <div class="progress-bar bg-success" role="progressbar" style="width: 35%">Completed (35%)</div>
+                                <div class="progress-bar bg-warning" role="progressbar" style="width: 40%">In Progress (40%)</div>
+                                <div class="progress-bar bg-light text-dark" role="progressbar" style="width: 25%">Not Started (25%)</div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                
-                <div class="benefit-card">
-                    <h3>📱 Stay Informed</h3>
-                    <p>Personalized alerts ensure your team is notified when topics relevant to your business are discussed.</p>
+                <div class="col-md-6">
+                    <div class="card shadow-sm">
+                        <div class="card-header">
+                            Key Topics Over Time
+                        </div>
+                        <div class="card-body">
+                            <div id="topics-trend" style="height: 250px;">
+                                <p class="text-center text-muted">Topic trend visualization coming soon</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Permits Section -->
+        <section id="permits" class="section">
+            <div class="row mb-4">
+                <div class="col-md-12">
+                    <h2>Permits & Compliance</h2>
+                    <p class="text-muted">Monitor environmental permits, regulatory compliance, and potential impacts</p>
+                </div>
+            </div>
+            
+            <div class="row mb-4">
+                <div class="col">
+                    <div class="card shadow-sm">
+                        <div class="card-header">
+                            Active Permits
+                        </div>
+                        <div class="card-body">
+                            <table id="permits-table" class="table">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Type</th>
+                                        <th>Status</th>
+                                        <th>Location</th>
+                                        <th>Expiry</th>
+                                        <th>Impact Level</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <!-- Will be populated by JavaScript -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="card shadow-sm">
+                        <div class="card-header">
+                            Permit Distribution by Type
+                        </div>
+                        <div class="card-body">
+                            <div id="permit-distribution" style="height: 250px;">
+                                <p class="text-center text-muted">Permit distribution visualization coming soon</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="card shadow-sm">
+                        <div class="card-header">
+                            Upcoming Permit Renewals
+                        </div>
+                        <div class="card-body">
+                            <ul class="list-group">
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    Water Discharge Permit P-23215
+                                    <span class="badge bg-warning">30 days left</span>
+                                </li>
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    Air Quality Permit P-23108
+                                    <span class="badge bg-danger">14 days left</span>
+                                </li>
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    Land Use Permit P-23350
+                                    <span class="badge bg-success">60 days left</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Sensors Section -->
+        <section id="sensors" class="section">
+            <div class="row mb-4">
+                <div class="col-md-12">
+                    <h2>Environmental Sensors</h2>
+                    <p class="text-muted">Real-time environmental data from distributed sensor networks</p>
+                </div>
+            </div>
+            
+            <div class="row mb-4">
+                <div class="col-md-8">
+                    <div class="card shadow-sm">
+                        <div class="card-header">
+                            Sensor Network
+                        </div>
+                        <div class="card-body">
+                            <div id="sensor-map" style="height: 400px;"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card shadow-sm">
+                        <div class="card-header">
+                            Sensor Status Summary
+                        </div>
+                        <div class="card-body">
+                            <div class="sensor-status">
+                                <div class="status-item">
+                                    <div class="status-indicator normal"></div>
+                                    <div class="status-label">Normal</div>
+                                    <div class="status-count">18 sensors</div>
+                                </div>
+                                <div class="status-item">
+                                    <div class="status-indicator warning"></div>
+                                    <div class="status-label">Warning</div>
+                                    <div class="status-count">3 sensors</div>
+                                </div>
+                                <div class="status-item">
+                                    <div class="status-indicator alert"></div>
+                                    <div class="status-label">Alert</div>
+                                    <div class="status-count">2 sensors</div>
+                                </div>
+                                <div class="status-item">
+                                    <div class="status-indicator inactive"></div>
+                                    <div class="status-label">Offline</div>
+                                    <div class="status-count">1 sensor</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="row">
+                <div class="col">
+                    <div class="card shadow-sm">
+                        <div class="card-header">
+                            Sensor Data
+                        </div>
+                        <div class="card-body">
+                            <table id="sensors-table" class="table">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Type</th>
+                                        <th>Location</th>
+                                        <th>Status</th>
+                                        <th>Current Reading</th>
+                                        <th>Last Update</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <!-- Will be populated by JavaScript -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Satellite Section -->
+        <section id="satellite" class="section">
+            <div class="row mb-4">
+                <div class="col-md-12">
+                    <h2>Satellite Monitoring</h2>
+                    <p class="text-muted">Remote sensing data for environmental change detection and impact assessment</p>
+                </div>
+            </div>
+            
+            <div class="row mb-4">
+                <div class="col">
+                    <div class="card shadow-sm">
+                        <div class="card-header">
+                            Recent Satellite Imagery
+                        </div>
+                        <div class="card-body">
+                            <div class="row satellite-images">
+                                <div class="col-md-4">
+                                    <div class="satellite-card">
+                                        <div class="satellite-image">
+                                            <div class="placeholder-image">Vegetation Index</div>
+                                        </div>
+                                        <div class="satellite-info">
+                                            <h6>Vegetation Health Index</h6>
+                                            <div class="metadata">Sentinel-2 • September 30, 2023</div>
+                                            <p>NDVI measurement showing vegetation health across monitored region</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="satellite-card">
+                                        <div class="satellite-image">
+                                            <div class="placeholder-image">Water Quality</div>
+                                        </div>
+                                        <div class="satellite-info">
+                                            <h6>Water Quality Assessment</h6>
+                                            <div class="metadata">Sentinel-3 • October 5, 2023</div>
+                                            <p>OLCI instrument data showing chlorophyll concentration and turbidity</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="satellite-card">
+                                        <div class="satellite-image">
+                                            <div class="placeholder-image">Land Cover</div>
+                                        </div>
+                                        <div class="satellite-info">
+                                            <h6>Land Cover Change</h6>
+                                            <div class="metadata">Landsat 9 • October 8, 2023</div>
+                                            <p>Detection of land use changes over the last 3 months</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="card shadow-sm">
+                        <div class="card-header">
+                            Vegetation Cover Change
+                        </div>
+                        <div class="card-body">
+                            <div id="vegetation-trend" style="height: 250px;">
+                                <p class="text-center text-muted">Vegetation trend visualization coming soon</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="card shadow-sm">
+                        <div class="card-header">
+                            Areas of Interest
+                        </div>
+                        <div class="card-body">
+                            <ul class="list-group">
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    East District Wetlands
+                                    <span class="badge bg-danger">Significant Change</span>
+                                </li>
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    North River Basin
+                                    <span class="badge bg-success">Stable</span>
+                                </li>
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    Western Forest Corridor
+                                    <span class="badge bg-warning">Minor Change</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
                 </div>
             </div>
         </section>
 
-        <section class="contact-info">
-            <h2>Ready to Get Started?</h2>
-            <p>Contact our sales team to schedule a demo and discuss how DocRAT can help your organization.</p>
-            <div class="contact-buttons">
-                <a href="mailto:sales@docrat.com" class="btn">Contact Sales</a>
-                <a href="tel:+18005551234" class="btn btn-outline">Call Us: 1-800-555-1234</a>
+        <!-- News Section -->
+        <section id="news" class="section">
+            <div class="row mb-4">
+                <div class="col-md-12">
+                    <h2>Environmental News</h2>
+                    <p class="text-muted">Real-time updates on environmental topics and sustainability initiatives</p>
+                </div>
+            </div>
+            
+            <div class="row mb-4">
+                <div class="col">
+                    <div class="card shadow-sm">
+                        <div class="card-header d-flex justify-content-between align-items-center">
+                            <span>Latest Environmental News</span>
+                            <span class="badge bg-success live-indicator">LIVE</span>
+                        </div>
+                        <div class="card-body">
+                            <div id="news-container" class="news-container">
+                                <div class="placeholder-content">
+                                    <div class="spinner-border text-primary" role="status">
+                                        <span class="visually-hidden">Loading...</span>
+                                    </div>
+                                    <p class="text-center mt-3">Loading latest environmental news...</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="card shadow-sm">
+                        <div class="card-header">
+                            News Impact on Sustainability
+                        </div>
+                        <div class="card-body">
+                            <div id="news-impact-chart" style="height: 250px;"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="card shadow-sm">
+                        <div class="card-header">
+                            News by Category
+                        </div>
+                        <div class="card-body">
+                            <div class="category-badges">
+                                <span class="badge rounded-pill bg-primary">Climate Change (23)</span>
+                                <span class="badge rounded-pill bg-success">Renewable Energy (18)</span>
+                                <span class="badge rounded-pill bg-info">Conservation (12)</span>
+                                <span class="badge rounded-pill bg-warning text-dark">Policy (10)</span>
+                                <span class="badge rounded-pill bg-secondary">Carbon Emissions (8)</span>
+                                <span class="badge rounded-pill bg-danger">Pollution (7)</span>
+                                <span class="badge rounded-pill bg-light text-dark">Biodiversity (5)</span>
+                                <span class="badge rounded-pill bg-dark">Sustainable Development (4)</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </section>
-
-    </main>
-
-    <footer>
+    </div>
+    
+    <!-- Footer -->
+    <footer class="footer mt-auto py-3 bg-light">
         <div class="container">
-            <p>&copy; 2023 DocRAT - Public Meeting Insights</p>
+            <span class="text-muted">© 2023 EcoInsight Monitoring Platform | Powered by DocRat</span>
         </div>
     </footer>
+    
+    <!-- Modals -->
+    <!-- Meeting Detail Modal -->
+    <div class="modal fade" id="meetingModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Meeting Details</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <h4>City Council Meeting - Environmental Policy Review</h4>
+                    <p class="text-muted">October 10, 2023</p>
+                    
+                    <h5 class="mt-4">Key Points</h5>
+                    <ul>
+                        <li>Discussion of updated Climate Action Plan with new emission targets</li>
+                        <li>Approval of Water Conservation Ordinance amendment</li>
+                        <li>Review of Urban Forestry initiative progress</li>
+                    </ul>
+                    
+                    <h5 class="mt-4">Environmental Commitments</h5>
+                    <div class="table-responsive">
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>Commitment</th>
+                                    <th>Responsible Party</th>
+                                    <th>Timeline</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Increase urban tree canopy by 15% within 5 years</td>
+                                    <td>Parks Department</td>
+                                    <td>By 2028</td>
+                                    <td><span class="badge bg-warning">In Progress</span></td>
+                                </tr>
+                                <tr>
+                                    <td>Implement water-use restrictions for commercial properties</td>
+                                    <td>Utilities Department</td>
+                                    <td>Q1 2024</td>
+                                    <td><span class="badge bg-light text-dark">Not Started</span></td>
+                                </tr>
+                                <tr>
+                                    <td>Complete city building energy efficiency audits</td>
+                                    <td>Facilities Management</td>
+                                    <td>Q4 2023</td>
+                                    <td><span class="badge bg-success">On Track</span></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary">Download Report</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Permit Detail Modal -->
+    <div class="modal fade" id="permitModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Permit Details</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <h4>Discharge Permit P-23418</h4>
+                    <p class="text-muted">South Waterfront • Under Review</p>
+                    
+                    <div class="row mt-4">
+                        <div class="col-md-6">
+                            <h5>Permit Information</h5>
+                            <table class="table table-sm">
+                                <tbody>
+                                    <tr>
+                                        <th>Applicant:</th>
+                                        <td>South Bay Industrial Corp.</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Application Date:</th>
+                                        <td>September 15, 2023</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Permit Type:</th>
+                                        <td>Water Discharge (Industrial)</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Status:</th>
+                                        <td>Under Review</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Environmental Impact:</th>
+                                        <td><span class="badge bg-danger">High</span></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="col-md-6">
+                            <h5>Monitored Parameters</h5>
+                            <table class="table table-sm">
+                                <thead>
+                                    <tr>
+                                        <th>Parameter</th>
+                                        <th>Limit</th>
+                                        <th>Expected</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>pH</td>
+                                        <td>6.5-8.5</td>
+                                        <td>7.2</td>
+                                    </tr>
+                                    <tr>
+                                        <td>TSS</td>
+                                        <td>30 mg/L</td>
+                                        <td>45 mg/L</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Copper</td>
+                                        <td>0.5 mg/L</td>
+                                        <td>0.8 mg/L</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Temperature</td>
+                                        <td>< 32°C</td>
+                                        <td>29°C</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    
+                    <h5 class="mt-4">Environmental Concerns</h5>
+                    <ul>
+                        <li>Discharge point is within 500m of protected wetland habitat</li>
+                        <li>Elevated levels of suspended solids exceed permitted limits</li>
+                        <li>Potential for copper bioaccumulation in aquatic organisms</li>
+                    </ul>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary">View Full Application</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
-    <script src="{{ url_for('static', path='/scripts.js') }}"></script>
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+    <script src="/static/main.js"></script>
 </body>
-</html> 
+</html>
