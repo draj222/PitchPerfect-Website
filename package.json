@@ -1,0 +1,32 @@
+{
+  "name": "connectup",
+  "version": "1.0.0",
+  "description": "A platform for connecting startup founders with potential cofounders and founding engineers",
+  "main": "index.js",
+  "scripts": {
+    "install:all": "npm run install:backend && npm run install:frontend",
+    "install:backend": "cd backend-new && npm install",
+    "install:frontend": "cd frontend && npm install",
+    "dev": "concurrently \"npm run dev:backend\" \"npm run dev:frontend\"",
+    "dev:backend": "cd backend-new && npm run dev",
+    "dev:frontend": "cd frontend && npm run dev",
+    "build": "npm run build:backend && npm run build:frontend",
+    "build:backend": "cd backend-new && npm run build",
+    "build:frontend": "cd frontend && npm run build",
+    "start:backend": "cd backend-new && npm start",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "startup",
+    "founders",
+    "matching",
+    "platform",
+    "AI",
+    "recruting"
+  ],
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  }
+} 
