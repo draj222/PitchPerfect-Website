@@ -21,7 +21,7 @@ export default function Home() {
         <meta property="og:url" content="https://pitch-perfect.app/" />
         <meta property="og:title" content="AI Pitch Feedback Bot" />
         <meta property="og:description" content="Get instant AI feedback on your startup pitch—perfect for demo prep or investor meetings." />
-        <meta property="og:image" content="https://pitch-perfect-website-gy0l1ud84-draj222s-projects.vercel.app/images/og-image-mic.jpg" />
+        <meta property="og:image" content="https://i.imgur.com/PEEPchU.png" />
         <meta property="og:image:width" content="1200" />
         <meta property="og:image:height" content="630" />
         
@@ -30,7 +30,7 @@ export default function Home() {
         <meta name="twitter:url" content="https://pitch-perfect.app/" />
         <meta name="twitter:title" content="AI Pitch Feedback Bot" />
         <meta name="twitter:description" content="Get instant AI feedback on your startup pitch—perfect for demo prep or investor meetings." />
-        <meta name="twitter:image" content="https://pitch-perfect-website-gy0l1ud84-draj222s-projects.vercel.app/images/og-image-mic.jpg" />
+        <meta name="twitter:image" content="https://i.imgur.com/PEEPchU.png" />
       </Head>
       
       <main className="min-h-screen bg-black text-white overflow-hidden">
