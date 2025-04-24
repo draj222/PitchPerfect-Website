@@ -21,16 +21,18 @@ export default function Home() {
         <meta property="og:url" content="https://pitch-perfect.app/" />
         <meta property="og:title" content="AI Pitch Feedback Bot" />
         <meta property="og:description" content="Get instant AI feedback on your startup pitch—perfect for demo prep or investor meetings." />
-        <meta property="og:image" content="https://res.cloudinary.com/demo/image/upload/sample.jpg" />
-        <meta property="og:image:width" content="600" />
-        <meta property="og:image:height" content="400" />
+        <meta property="og:image" content="https://images.unsplash.com/photo-1519683109079-d5f539e1542f?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" />
+        <meta property="og:image:width" content="1170" />
+        <meta property="og:image:height" content="780" />
+        <meta property="og:image:alt" content="Red microphone on black background" />
         
         {/* Twitter */}
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:url" content="https://pitch-perfect.app/" />
         <meta name="twitter:title" content="AI Pitch Feedback Bot" />
         <meta name="twitter:description" content="Get instant AI feedback on your startup pitch—perfect for demo prep or investor meetings." />
-        <meta name="twitter:image" content="https://res.cloudinary.com/demo/image/upload/sample.jpg" />
+        <meta name="twitter:image" content="https://images.unsplash.com/photo-1519683109079-d5f539e1542f?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" />
+        <meta name="twitter:image:alt" content="Red microphone on black background" />
       </Head>
       
       <main className="min-h-screen bg-black text-white overflow-hidden">
