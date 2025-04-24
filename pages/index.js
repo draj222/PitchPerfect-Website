@@ -20,17 +20,12 @@ export default function Home() {
         <meta property="og:type" content="website" />
         <meta property="og:url" content="https://pitch-perfect.app/" />
         <meta property="og:title" content="Pitch Perfect - AI Pitch Feedback Bot" />
-        <meta property="og:description" content="Perfect Your Pitch with AI Feedback - Discord bot that listens to your startup pitch, transcribes it using Whisper, and delivers instant feedback via GPT-4." />
-        <meta property="og:image" content="https://raw.githubusercontent.com/draj222/PitchPerfect-Website/main/public/images/og-image.jpg" />
-        <meta property="og:image:width" content="1200" />
-        <meta property="og:image:height" content="630" />
+        <meta property="og:description" content="Perfect Your Pitch with AI Feedback - Discord bot that listens to your startup pitch and delivers instant feedback." />
+        <meta property="og:image" content="https://pitch-perfect.app/images/og-image.jpg" />
         
         {/* Twitter */}
         <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:url" content="https://pitch-perfect.app/" />
-        <meta name="twitter:title" content="Pitch Perfect - AI Pitch Feedback Bot" />
-        <meta name="twitter:description" content="Perfect Your Pitch with AI Feedback - Discord bot that listens to your startup pitch, transcribes it using Whisper, and delivers instant feedback via GPT-4." />
-        <meta name="twitter:image" content="https://raw.githubusercontent.com/draj222/PitchPerfect-Website/main/public/images/og-image.jpg" />
+        <meta name="twitter:image" content="https://pitch-perfect.app/images/og-image.jpg" />
       </Head>
       
       <main className="min-h-screen bg-black text-white overflow-hidden">
