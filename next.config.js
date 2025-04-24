@@ -5,6 +5,9 @@ const nextConfig = {
     unoptimized: true,
     domains: ['localhost'],
   },
+  experimental: {
+    forceSwcTransforms: true,
+  }
 };
 
 module.exports = nextConfig;
