@@ -9,7 +9,12 @@ export default function Home() {
       <Head>
         <title>Pitch Perfect - AI Pitch Feedback Discord Bot</title>
         <meta name="description" content="Pitch Perfect is a voice-enabled Discord bot that listens to your startup pitch in real-time, transcribes it using Whisper, and delivers instant investor-style feedback via GPT-4." />
-        <link rel="icon" href="/favicon.ico" />
+        <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><circle cx=%2250%22 cy=%2250%22 r=%2245%22 fill=%22%23000%22 stroke=%22%23C41E3A%22 stroke-width=%228%22/><path d=%22M50 75C42 75 35 68 35 60V40C35 32 42 25 50 25C58 25 65 32 65 40V60C65 68 58 75 50 75Z%22 fill=%22%23C41E3A%22/><rect x=%2240%22 y=%2235%22 width=%2220%22 height=%225%22 rx=%222%22 fill=%22%23000%22/><rect x=%2240%22 y=%2245%22 width=%2220%22 height=%225%22 rx=%222%22 fill=%22%23000%22/><rect x=%2240%22 y=%2255%22 width=%2220%22 height=%225%22 rx=%222%22 fill=%22%23000%22/></svg>" />
+        <link rel="apple-touch-icon" sizes="180x180" href="/favicon/apple-touch-icon.png" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon/favicon-32x32.png" />
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon/favicon-16x16.png" />
+        <link rel="manifest" href="/favicon/site.webmanifest" />
+        <meta name="theme-color" content="#C41E3A" />
       </Head>
       
       <main className="min-h-screen bg-black text-white overflow-hidden">
@@ -19,20 +24,39 @@ export default function Home() {
           <div className="absolute bottom-0 -right-40 w-96 h-96 bg-gradient-to-br from-[#C41E3A]/30 to-transparent rounded-full blur-3xl opacity-20"></div>
         </div>
         
+        {/* Top left corner logo - original (now hidden) */}
+        <a href="/" className="fixed top-5 left-5 z-[100] w-14 h-14 bg-black rounded-full p-1.5 backdrop-blur-lg border-2 border-[#C41E3A] shadow-[0_0_20px_rgba(196,30,58,0.4)] transition-transform duration-300 hover:scale-110 cursor-pointer flex items-center justify-center hidden">
+          <Image 
+            src="/logo.svg" 
+            alt="Pitch Perfect Logo" 
+            width={48}
+            height={48}
+            className="w-full h-full"
+            priority
+          />
+        </a>
+        
+        {/* New top left corner logo - highly visible tab style */}
+        <a href="/" className="fixed top-0 left-8 z-[100] bg-[#C41E3A] px-6 py-3 rounded-b-xl shadow-xl hover:bg-[#a01930] transition-colors duration-300 flex items-center gap-3 border-b-4 border-l-2 border-r-2 border-black">
+          <div className="bg-white rounded-full p-1 w-7 h-7 flex items-center justify-center">
+            <svg width="20" height="20" viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="200" cy="200" r="180" fill="black" stroke="#C41E3A" strokeWidth="20"/>
+              <path d="M200 320 C160 320 130 290 130 250 L130 150 C130 110 160 80 200 80 C240 80 270 110 270 150 L270 250 C270 290 240 320 200 320Z" fill="#C41E3A" stroke="#C41E3A" strokeWidth="5"/>
+              <rect x="160" y="100" width="80" height="15" rx="5" fill="black"/>
+              <rect x="160" y="125" width="80" height="15" rx="5" fill="black"/>
+              <rect x="160" y="150" width="80" height="15" rx="5" fill="black"/>
+              <rect x="160" y="175" width="80" height="15" rx="5" fill="black"/>
+              <rect x="160" y="200" width="80" height="15" rx="5" fill="black"/>
+            </svg>
+          </div>
+          <span className="font-bold text-white">Pitch Perfect</span>
+        </a>
+        
         {/* Header */}
         <header className="fixed w-full z-50 bg-black/80 backdrop-blur-lg py-4 border-b border-[#C41E3A]/20">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-between items-center">
-            <div className="flex items-center gap-3">
-              <div className="relative w-10 h-10">
-                <Image 
-                  src="/logo.svg" 
-                  alt="Pitch Perfect Logo" 
-                  width={40}
-                  height={40}
-                  className="w-full h-full"
-                />
-              </div>
-              <span className="font-bold text-xl">Pitch Perfect</span>
+            <div className="flex items-center gap-3 ml-36 md:ml-32">
+              <span className="font-bold text-xl hidden">Pitch Perfect</span>
             </div>
             
             <nav className="hidden md:block">
