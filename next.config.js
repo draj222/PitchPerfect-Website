@@ -2,8 +2,11 @@
 const nextConfig = {
   reactStrictMode: true,
   images: {
-    unoptimized: true
-  }
+    domains: ['pitch-perfect.app'],
+    unoptimized: true,
+  },
+  output: 'export',
+  trailingSlash: true,
 }
 
 module.exports = nextConfig
