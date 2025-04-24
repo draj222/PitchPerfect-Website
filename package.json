@@ -1,34 +1,32 @@
 {
-  "name": "connectup",
+  "name": "pitch-perfect-website",
   "version": "1.0.0",
-  "description": "A platform for connecting startup founders with potential cofounders and founding engineers",
-  "main": "index.js",
+  "type": "module",
+  "description": "Modern landing page for Pitch Perfect Discord bot",
   "scripts": {
-    "install:all": "npm run install:backend && npm run install:frontend",
-    "install:backend": "cd backend && npm install",
-    "install:frontend": "cd frontend && npm install",
-    "dev": "concurrently \"npm run dev:backend\" \"npm run dev:frontend\"",
-    "dev:backend": "cd backend && npm run dev",
-    "dev:frontend": "cd frontend && npm run dev",
-    "build": "npm run build:backend && npm run build:frontend",
-    "build:backend": "cd backend && npm run build",
+    "dev": "cd frontend && npm run dev",
+    "build": "node build.mjs",
+    "build:backend": "cd backend && npx tsc",
     "build:frontend": "cd frontend && npm run build",
-    "start": "cd backend && npm run start:prod",
-    "start:backend": "cd backend && npm start",
-    "start:prod": "NODE_ENV=production npm run start",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "cd frontend && npm run start",
+    "lint": "cd frontend && npm run lint"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "dependencies": {
+    "typescript": "^5.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0"
   },
   "keywords": [
-    "startup",
-    "founders",
-    "matching",
-    "platform",
-    "AI",
-    "recruting"
+    "discord",
+    "bot",
+    "pitch",
+    "ai",
+    "landing-page"
   ],
   "author": "",
-  "license": "MIT",
-  "devDependencies": {
-    "concurrently": "^8.2.2"
-  }
-} 
+  "license": "MIT"
+}
