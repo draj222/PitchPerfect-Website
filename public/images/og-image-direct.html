@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Pitch Perfect Preview</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+      background-color: #000;
+      color: #fff;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 1200px;
+      height: 630px;
+      overflow: hidden;
+      position: relative;
+    }
+    
+    .bg-gradient-1 {
+      position: absolute;
+      top: -150px;
+      left: -150px;
+      width: 600px;
+      height: 600px;
+      background: radial-gradient(circle, rgba(196,30,58,0.3) 0%, rgba(0,0,0,0) 70%);
+      opacity: 0.2;
+      border-radius: 50%;
+    }
+    
+    .bg-gradient-2 {
+      position: absolute;
+      bottom: -150px;
+      right: -150px;
+      width: 600px;
+      height: 600px;
+      background: radial-gradient(circle, rgba(196,30,58,0.3) 0%, rgba(0,0,0,0) 70%);
+      opacity: 0.2;
+      border-radius: 50%;
+    }
+    
+    .container {
+      width: 1000px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      z-index: 1;
+    }
+    
+    .content {
+      width: 60%;
+    }
+    
+    .badge {
+      display: inline-block;
+      padding: 6px 12px;
+      background-color: rgba(196,30,58,0.1);
+      border: 1px solid rgba(196,30,58,0.2);
+      border-radius: 50px;
+      color: #C41E3A;
+      font-size: 16px;
+      font-weight: 600;
+      margin-bottom: 20px;
+    }
+    
+    h1 {
+      font-size: 64px;
+      margin: 0 0 20px 0;
+      line-height: 1.1;
+    }
+    
+    h1 .highlight {
+      color: #C41E3A;
+      position: relative;
+    }
+    
+    h1 .highlight::after {
+      content: '';
+      position: absolute;
+      bottom: -10px;
+      left: 0;
+      width: 100%;
+      height: 4px;
+      background-color: rgba(196,30,58,0.3);
+    }
+    
+    p {
+      font-size: 22px;
+      line-height: 1.4;
+      color: #AAA;
+      margin-bottom: 30px;
+    }
+    
+    .logo {
+      width: 350px;
+      height: 350px;
+      position: relative;
+    }
+    
+    .logo-circle {
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(196,30,58,0.2) 0%, rgba(0,0,0,0) 70%);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    
+    .logo-inner {
+      width: 250px;
+      height: 250px;
+      border-radius: 50%;
+      background-color: #000;
+      border: 20px solid #C41E3A;
+      position: relative;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    
+    .mic {
+      width: 140px;
+      height: 240px;
+      background-color: #C41E3A;
+      border-radius: 40px;
+      position: relative;
+    }
+    
+    .mic-line {
+      width: 80px;
+      height: 15px;
+      background-color: #000;
+      border-radius: 5px;
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+    
+    .mic-line:nth-child(1) { top: 20px; }
+    .mic-line:nth-child(2) { top: 45px; }
+    .mic-line:nth-child(3) { top: 70px; }
+    .mic-line:nth-child(4) { top: 95px; }
+    .mic-line:nth-child(5) { top: 120px; }
+    
+    .badge-floating {
+      position: absolute;
+      padding: 10px 15px;
+      background-color: rgba(0,0,0,0.8);
+      border: 1px solid rgba(196,30,58,0.4);
+      border-radius: 8px;
+      color: #fff;
+      font-size: 14px;
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    }
+    
+    .badge-floating .dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+    }
+    
+    .badge-listening {
+      top: -20px;
+      right: -20px;
+    }
+    
+    .badge-listening .dot {
+      background-color: #C41E3A;
+    }
+    
+    .badge-analyzing {
+      bottom: -20px;
+      left: -20px;
+    }
+    
+    .badge-analyzing .dot {
+      background-color: #4CAF50;
+    }
+  </style>
+</head>
+<body>
+  <div class="bg-gradient-1"></div>
+  <div class="bg-gradient-2"></div>
+  
+  <div class="container">
+    <div class="content">
+      <div class="badge">Voice-enabled Discord bot</div>
+      <h1>Perfect Your Pitch with <span class="highlight">AI Feedback</span></h1>
+      <p>🎤 Pitch Perfect listens to your startup pitch in real-time, transcribes it using Whisper, and delivers instant investor-style feedback via GPT-4 — all from inside a Discord voice channel.</p>
+    </div>
+    
+    <div class="logo">
+      <div class="logo-circle">
+        <div class="logo-inner">
+          <div class="mic">
+            <div class="mic-line"></div>
+            <div class="mic-line"></div>
+            <div class="mic-line"></div>
+            <div class="mic-line"></div>
+            <div class="mic-line"></div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="badge-floating badge-listening">
+        <div class="dot"></div>
+        <span>Listening...</span>
+      </div>
+      
+      <div class="badge-floating badge-analyzing">
+        <div class="dot"></div>
+        <span>AI Analyzing...</span>
+      </div>
+    </div>
+  </div>
+</body>
+</html> 
