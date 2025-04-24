@@ -1,0 +1,128 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
+:root {
+  --foreground-rgb: 255, 255, 255;
+  --background-rgb: 0, 0, 0;
+  --background-secondary-rgb: 10, 10, 10;
+  --accent-color: 196, 30, 58; /* #C41E3A */
+  --accent-color-dark: 160, 25, 48; /* #a01930 */
+  --accent-color-light: 217, 51, 78; /* #d9334e */
+}
+
+body {
+  color: rgb(var(--foreground-rgb));
+  background: rgb(var(--background-rgb));
+  font-family: 'Inter', sans-serif;
+  overflow-x: hidden;
+}
+
+/* Scrollbar Styling */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.3);
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(196, 30, 58, 0.5);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(196, 30, 58, 0.8);
+}
+
+/* Smooth scrolling */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Selection color */
+::selection {
+  background: rgba(196, 30, 58, 0.7);
+  color: white;
+}
+
+@layer base {
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-bold tracking-tight;
+  }
+}
+
+@layer components {
+  .btn-primary {
+    @apply bg-[#C41E3A] hover:bg-[#a01930] text-white font-medium py-3 px-6 rounded-md transition-all duration-300 relative overflow-hidden;
+  }
+  
+  .btn-secondary {
+    @apply border border-[#C41E3A] text-white hover:bg-[#C41E3A]/10 font-medium py-3 px-6 rounded-md transition-all duration-300;
+  }
+
+  .section-title {
+    @apply text-3xl md:text-4xl font-bold mb-6;
+  }
+  
+  .container-custom {
+    @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
+  }
+  
+  .glass-card {
+    @apply bg-black/40 backdrop-blur-sm border border-gray-800 rounded-xl hover:border-[#C41E3A]/40 transition-all duration-300 hover:shadow-[0_0_15px_rgba(196,30,58,0.1)];
+  }
+  
+  .feature-icon {
+    @apply w-12 h-12 rounded-full bg-[#C41E3A]/10 flex items-center justify-center mb-6 text-[#C41E3A] group-hover:bg-[#C41E3A]/20 transition-all duration-300;
+  }
+  
+  .section-badge {
+    @apply inline-block px-3 py-1 bg-[#C41E3A]/10 rounded-full text-[#C41E3A] text-sm font-medium mb-4 border border-[#C41E3A]/20;
+  }
+  
+  .step-number {
+    @apply w-16 h-16 rounded-full bg-[#C41E3A]/10 flex items-center justify-center text-xl font-bold text-[#C41E3A] border border-[#C41E3A]/30 group-hover:bg-[#C41E3A]/20 group-hover:border-[#C41E3A] transition-all duration-300;
+  }
+}
+
+/* Custom animations */
+@keyframes pulse-accent {
+  0%, 100% {
+    opacity: 0.5;
+  }
+  50% {
+    opacity: 0.8;
+  }
+}
+
+.animate-pulse-accent {
+  animation: pulse-accent 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+/* For aspect ratio before the utility is applied */
+.aspect-w-16 {
+  position: relative;
+  padding-bottom: calc(var(--tw-aspect-h) / var(--tw-aspect-w) * 100%);
+  --tw-aspect-w: 16;
+}
+
+.aspect-h-9 {
+  --tw-aspect-h: 9;
+}
+
+.aspect-w-16 > * {
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
