@@ -2,11 +2,7 @@
 const nextConfig = {
   reactStrictMode: true,
   images: {
-    unoptimized: true,
-    domains: ['localhost'],
-  },
-  experimental: {
-    forceSwcTransforms: true,
+    unoptimized: true
   }
 };
 
