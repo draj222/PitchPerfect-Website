@@ -18,13 +18,22 @@ export default function Home() {
         
         {/* Open Graph / Facebook */}
         <meta property="og:type" content="website" />
-        <meta property="og:title" content="AI Pitch Feedback Bot" />
-        <meta property="og:description" content="Get instant AI feedback on your startup pitch—perfect for demo prep or investor meetings." />
+        <meta property="og:site_name" content="Pitch Perfect" />
+        <meta property="og:url" content="https://pitch-perfect.app" />
+        <meta property="og:title" content="Pitch Perfect" />
+        <meta property="og:description" content="Perfect your startup pitch with real-time AI feedback" />
+        <meta property="og:image" content="https://pitch-perfect.app/images/og-image.png" />
+        <meta property="og:image:width" content="1200" />
+        <meta property="og:image:height" content="630" />
+        <meta property="og:image:alt" content="Pitch Perfect - AI-Powered Pitch Feedback" />
         
         {/* Twitter */}
-        <meta name="twitter:card" content="summary" />
-        <meta name="twitter:title" content="AI Pitch Feedback Bot" />
-        <meta name="twitter:description" content="Get instant AI feedback on your startup pitch—perfect for demo prep or investor meetings." />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:site" content="@pitchperfectapp" />
+        <meta name="twitter:url" content="https://pitch-perfect.app" />
+        <meta name="twitter:title" content="Pitch Perfect" />
+        <meta name="twitter:description" content="Perfect your startup pitch with real-time AI feedback" />
+        <meta name="twitter:image" content="https://pitch-perfect.app/images/og-image.png" />
       </Head>
       
       <main className="min-h-screen bg-black text-white overflow-hidden">

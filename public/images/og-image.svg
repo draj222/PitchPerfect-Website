@@ -3,12 +3,8 @@
   <!-- Background -->
   <rect width="1200" height="630" fill="black"/>
   
-  <!-- Red gradient background elements -->
-  <circle cx="200" cy="200" r="300" fill="url(#redGradient1)" opacity="0.2"/>
-  <circle cx="1000" cy="500" r="300" fill="url(#redGradient2)" opacity="0.2"/>
-  
   <!-- Logo -->
-  <g transform="translate(350, 150) scale(0.7)">
+  <g transform="translate(400, 100) scale(0.6)">
     <circle cx="200" cy="200" r="180" fill="black" stroke="#C41E3A" stroke-width="20"/>
     <path d="M200 320 
              C160 320 130 290 130 250
@@ -23,25 +19,10 @@
     <rect x="160" y="150" width="80" height="15" rx="5" fill="black"/>
     <rect x="160" y="175" width="80" height="15" rx="5" fill="black"/>
     <rect x="160" y="200" width="80" height="15" rx="5" fill="black"/>
-    <rect x="170" y="320" width="10" height="100" rx="5" fill="#C41E3A"/>
-    <rect x="220" y="320" width="10" height="100" rx="5" fill="#C41E3A"/>
-    <circle cx="200" cy="350" r="30" fill="#C41E3A" stroke="black" stroke-width="5"/>
   </g>
   
   <!-- Text -->
-  <text x="700" y="250" font-family="Arial, sans-serif" font-size="72" font-weight="bold" fill="white" text-anchor="middle">Pitch Perfect</text>
-  <text x="700" y="330" font-family="Arial, sans-serif" font-size="36" fill="#C41E3A" text-anchor="middle">AI-Powered Pitch Feedback</text>
-  <text x="700" y="400" font-family="Arial, sans-serif" font-size="28" fill="#999" text-anchor="middle">Perfect your startup pitch with real-time AI feedback</text>
-  
-  <!-- Gradients -->
-  <defs>
-    <linearGradient id="redGradient1" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#C41E3A" stop-opacity="0.8"/>
-      <stop offset="100%" stop-color="#C41E3A" stop-opacity="0"/>
-    </linearGradient>
-    <linearGradient id="redGradient2" x1="100%" y1="0%" x2="0%" y2="100%">
-      <stop offset="0%" stop-color="#C41E3A" stop-opacity="0.8"/>
-      <stop offset="100%" stop-color="#C41E3A" stop-opacity="0"/>
-    </linearGradient>
-  </defs>
+  <text x="600" y="250" font-family="Arial, sans-serif" font-size="64" font-weight="bold" fill="white" text-anchor="middle">Pitch Perfect</text>
+  <text x="600" y="320" font-family="Arial, sans-serif" font-size="32" fill="#C41E3A" text-anchor="middle">AI-Powered Pitch Feedback</text>
+  <text x="600" y="380" font-family="Arial, sans-serif" font-size="24" fill="#999" text-anchor="middle">Perfect your startup pitch with real-time AI feedback</text>
 </svg> 
