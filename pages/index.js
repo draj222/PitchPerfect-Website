@@ -20,21 +20,17 @@ export default function Home() {
         <meta property="og:type" content="website" />
         <meta property="og:url" content="https://pitch-perfect.app/" />
         <meta property="og:title" content="Pitch Perfect - AI Pitch Feedback Bot" />
-        <meta property="og:description" content="Improve your startup pitch with real-time AI feedback. Our Discord bot listens to your pitch, transcribes it, and provides instant expert-quality feedback." />
-        <meta property="og:image" content="https://pitch-perfect-website-1e8ze57bg-draj222s-projects.vercel.app/images/og-image-hero.jpg" />
-        <meta property="og:image:secure_url" content="https://pitch-perfect-website-1e8ze57bg-draj222s-projects.vercel.app/images/og-image-hero.jpg" />
-        <meta property="og:image:type" content="image/jpeg" />
+        <meta property="og:description" content="Perfect Your Pitch with AI Feedback - Discord bot that listens to your startup pitch, transcribes it using Whisper, and delivers instant feedback via GPT-4." />
+        <meta property="og:image" content="https://raw.githubusercontent.com/draj222/PitchPerfect-Website/main/public/images/og-image.jpg" />
         <meta property="og:image:width" content="1200" />
         <meta property="og:image:height" content="630" />
-        <meta property="og:image:alt" content="Perfect Your Pitch with AI Feedback" />
         
         {/* Twitter */}
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:url" content="https://pitch-perfect.app/" />
         <meta name="twitter:title" content="Pitch Perfect - AI Pitch Feedback Bot" />
-        <meta name="twitter:description" content="Improve your startup pitch with real-time AI feedback. Our Discord bot listens to your pitch, transcribes it, and provides instant expert-quality feedback." />
-        <meta name="twitter:image" content="https://pitch-perfect-website-1e8ze57bg-draj222s-projects.vercel.app/images/og-image-hero.jpg" />
-        <meta name="twitter:image:alt" content="Perfect Your Pitch with AI Feedback" />
+        <meta name="twitter:description" content="Perfect Your Pitch with AI Feedback - Discord bot that listens to your startup pitch, transcribes it using Whisper, and delivers instant feedback via GPT-4." />
+        <meta name="twitter:image" content="https://raw.githubusercontent.com/draj222/PitchPerfect-Website/main/public/images/og-image.jpg" />
       </Head>
       
       <main className="min-h-screen bg-black text-white overflow-hidden">
