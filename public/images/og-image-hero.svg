@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="1200" height="630" viewBox="0 0 1200 630" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background -->
+  <rect width="1200" height="630" fill="black"/>
+  
+  <!-- Red gradient background elements -->
+  <circle cx="100" cy="100" r="300" fill="url(#redGradient1)" opacity="0.2"/>
+  <circle cx="1100" cy="530" r="300" fill="url(#redGradient2)" opacity="0.2"/>
+  
+  <!-- Voice-enabled Discord bot tag -->
+  <rect x="100" y="120" width="220" height="30" rx="15" fill="rgba(196,30,58,0.1)" stroke="rgba(196,30,58,0.2)" stroke-width="1"/>
+  <text x="120" y="140" font-family="Arial, sans-serif" font-size="16" font-weight="bold" fill="#C41E3A">Voice-enabled Discord bot</text>
+  
+  <!-- Main heading -->
+  <text x="100" y="220" font-family="Arial, sans-serif" font-size="72" font-weight="bold" fill="white">Perfect Your Pitch</text>
+  <text x="100" y="300" font-family="Arial, sans-serif" font-size="72" font-weight="bold" fill="#C41E3A">with AI Feedback</text>
+  
+  <!-- Underline -->
+  <rect x="100" y="310" width="500" height="4" rx="2" fill="rgba(196,30,58,0.3)"/>
+  
+  <!-- Description -->
+  <text x="100" y="360" font-family="Arial, sans-serif" font-size="24" fill="#AAAAAA">🎤 Pitch Perfect listens to your startup pitch in real-time,</text>
+  <text x="100" y="400" font-family="Arial, sans-serif" font-size="24" fill="#AAAAAA">transcribes it using Whisper, and delivers instant investor-</text>
+  <text x="100" y="440" font-family="Arial, sans-serif" font-size="24" fill="#AAAAAA">style feedback via GPT-4 — all from inside a Discord voice channel.</text>
+  
+  <!-- Logo -->
+  <g transform="translate(900, 300) scale(1)">
+    <!-- Outer circle -->
+    <circle cx="0" cy="0" r="180" fill="black" stroke="#C41E3A" stroke-width="20"/>
+    
+    <!-- Microphone body -->
+    <path d="M0 120 
+             C-40 120 -70 90 -70 50
+             L-70 -50
+             C-70 -90 -40 -120 0 -120
+             C40 -120 70 -90 70 -50
+             L70 50
+             C70 90 40 120 0 120Z" 
+          fill="#C41E3A" stroke="#C41E3A" stroke-width="5"/>
+    
+    <!-- Microphone lines -->
+    <rect x="-40" y="-100" width="80" height="15" rx="5" fill="black"/>
+    <rect x="-40" y="-75" width="80" height="15" rx="5" fill="black"/>
+    <rect x="-40" y="-50" width="80" height="15" rx="5" fill="black"/>
+    <rect x="-40" y="-25" width="80" height="15" rx="5" fill="black"/>
+    <rect x="-40" y="0" width="80" height="15" rx="5" fill="black"/>
+  </g>
+  
+  <!-- Gradients -->
+  <defs>
+    <linearGradient id="redGradient1" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#C41E3A" stop-opacity="0.8"/>
+      <stop offset="100%" stop-color="#C41E3A" stop-opacity="0"/>
+    </linearGradient>
+    <linearGradient id="redGradient2" x1="100%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#C41E3A" stop-opacity="0.8"/>
+      <stop offset="100%" stop-color="#C41E3A" stop-opacity="0"/>
+    </linearGradient>
+  </defs>
+</svg> 

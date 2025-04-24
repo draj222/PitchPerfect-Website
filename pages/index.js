@@ -21,18 +21,20 @@ export default function Home() {
         <meta property="og:url" content="https://pitch-perfect.app/" />
         <meta property="og:title" content="Pitch Perfect - AI Pitch Feedback Bot" />
         <meta property="og:description" content="Improve your startup pitch with real-time AI feedback. Our Discord bot listens to your pitch, transcribes it, and provides instant expert-quality feedback." />
-        <meta property="og:image" content="https://pitch-perfect.app/images/og-image.png" />
+        <meta property="og:image" content="https://pitch-perfect.app/images/og-image-hero.png" />
+        <meta property="og:image:secure_url" content="https://pitch-perfect.app/images/og-image-hero.png" />
+        <meta property="og:image:type" content="image/png" />
         <meta property="og:image:width" content="1200" />
         <meta property="og:image:height" content="630" />
-        <meta property="og:image:alt" content="Pitch Perfect - AI-Powered Pitch Feedback" />
+        <meta property="og:image:alt" content="Perfect Your Pitch with AI Feedback" />
         
         {/* Twitter */}
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:url" content="https://pitch-perfect.app/" />
         <meta name="twitter:title" content="Pitch Perfect - AI Pitch Feedback Bot" />
         <meta name="twitter:description" content="Improve your startup pitch with real-time AI feedback. Our Discord bot listens to your pitch, transcribes it, and provides instant expert-quality feedback." />
-        <meta name="twitter:image" content="https://pitch-perfect.app/images/og-image.png" />
-        <meta name="twitter:image:alt" content="Pitch Perfect - AI-Powered Pitch Feedback" />
+        <meta name="twitter:image" content="https://pitch-perfect.app/images/og-image-hero.png" />
+        <meta name="twitter:image:alt" content="Perfect Your Pitch with AI Feedback" />
       </Head>
       
       <main className="min-h-screen bg-black text-white overflow-hidden">
