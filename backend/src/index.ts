@@ -6,6 +6,7 @@ import morgan from 'morgan';
 import dotenv from 'dotenv';
 import { createServer } from 'http';
 import { Server } from 'socket.io';
+import path from 'path';
 
 // Load environment variables
 dotenv.config();
@@ -49,9 +50,31 @@ app.use('/api/matching', matchingRoutes);
 app.use('/api/messages', messageRoutes);
 
 // Health check route
-app.get('/health', (req, res) => {
+app.get('/api/health', (req, res) => {
   res.status(200).json({ status: 'OK', message: 'Server is running' });
 });
+
+// Demo mode route - for running without MongoDB
+app.get('/api/demo', (req, res) => {
+  res.status(200).json({ 
+    message: 'Running in demo mode without MongoDB',
+    setup: 'Please install MongoDB to use full functionality'
+  });
+});
+
+// Production mode - serve static frontend files
+if (process.env.NODE_ENV === 'production') {
+  // Serve static files from the React frontend app
+  const frontendBuildPath = path.join(__dirname, '../../frontend/dist');
+  app.use(express.static(frontendBuildPath));
+
+  // Handle any requests that don't match the ones above
+  app.get('*', (req, res) => {
+    res.sendFile(path.join(frontendBuildPath, 'index.html'));
+  });
+  
+  console.log('Serving frontend from:', frontendBuildPath);
+}
 
 // Socket.io event handlers
 io.on('connection', (socket) => {
@@ -74,14 +97,25 @@ io.on('connection', (socket) => {
   });
 });
 
-// Connect to MongoDB and start the server
+// Try to connect to MongoDB, but start server regardless
+console.log('Attempting to connect to MongoDB...');
 mongoose
   .connect(MONGODB_URI)
   .then(() => {
-    httpServer.listen(PORT, () => {
-      console.log(`Server running on port ${PORT}`);
-    });
+    console.log('MongoDB connected successfully');
+    startServer();
   })
   .catch((error) => {
     console.error('MongoDB connection error:', error);
+    console.log('Starting server in demo mode without MongoDB...');
+    startServer();
   });
+
+// Function to start the server
+function startServer() {
+  httpServer.listen(PORT, () => {
+    console.log(`Server running on port ${PORT}`);
+    console.log(`Environment: ${process.env.NODE_ENV || 'development'}`);
+    console.log(`Health check: http://localhost:${PORT}/api/health`);
+  });
+}

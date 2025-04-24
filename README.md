@@ -1,94 +1,92 @@
 # ConnectUp
 
-A modern web application for connecting startup founders with potential cofounders and founding engineers.
+A platform for connecting startup founders with potential cofounders and founding engineers.
 
-## Overview
+## Features
 
-ConnectUp is a matchmaking platform that uses AI to intelligently pair startup founders looking to fill key roles with skilled individuals looking to join impactful startups.
-
-## Key Features
-
-- User Authentication & Profile Management
-- Posting and Viewing Roles
-- AI-Driven Matching Engine
-- Integrated Communication Platform
-- Analytics Dashboard
+- User authentication and profile management
+- Job posting and discovery system
+- Matching algorithm based on skills and preferences
+- Real-time messaging with potential connections
+- Dashboard with analytics and progress tracking
 
 ## Tech Stack
 
-- **Frontend**: React.js with TailwindCSS
-- **Backend**: Node.js with Express.js and TypeScript
+- **Frontend**: React, TypeScript, Vite, Tailwind CSS
+- **Backend**: Node.js, Express, TypeScript
 - **Database**: MongoDB
-- **Authentication**: JWT (JSON Web Tokens)
-- **AI Integration**: OpenAI API for intelligent matching
-- **Deployment**: Docker & Docker Compose
+- **Real-time Communication**: Socket.io
 
-## Getting Started
+## Prerequisites
 
-### Prerequisites
+- Node.js (v14+)
+- npm (v7+)
+- MongoDB (local or Atlas connection)
 
-- Node.js (v18 or later)
-- npm or yarn
-- MongoDB (optional - app can run without DB)
+## Environment Setup
 
-### Installation
+1. Clone the repository
+2. Set up environment variables:
+   - Copy `frontend/.env.example` to `frontend/.env`
+   - Copy `backend/.env.example` to `backend/.env`
+   - Update the environment variables as needed
 
-1. Clone the repository:
-   ```
-   git clone https://github.com/yourusername/connectup.git
-   cd connectup
-   ```
+## Development Mode
 
-2. Install dependencies:
-   ```
-   # Install all dependencies at once
-   npm run install:all
-   
-   # Or install separately:
-   # Backend dependencies
-   cd backend-new
-   npm install
+To run the application in development mode with hot reloading:
 
-   # Frontend dependencies
-   cd ../frontend
-   npm install
-   ```
+```bash
+# Install dependencies for both frontend and backend
+npm run install:all
 
-3. Configure environment variables:
-   - Backend environment variables are in `backend-new/.env`
-   - Key settings to update:
-     - `JWT_SECRET` for security
-     - `MONGODB_URI` if using a different MongoDB instance
-     - `OPENAI_API_KEY` for matching functionality
+# Start both servers in development mode
+npm run dev
+```
 
-4. Start the development servers:
-   ```
-   # Start both backend and frontend at once
-   npm run dev
-   
-   # Or start separately:
-   # Start backend server
-   npm run dev:backend
+This will start:
+- Frontend server at http://localhost:5173
+- Backend server at http://localhost:5000
 
-   # Start frontend server
-   npm run dev:frontend
-   ```
+## Production Mode
 
-5. Access the application:
-   - Frontend: http://localhost:5173
-   - Backend API: http://localhost:5001
-   - API Health Check: http://localhost:5001/health
+To build and run the application in production mode:
+
+```bash
+# Option 1: Use the deploy script (recommended)
+./deploy.sh
+
+# Option 2: Manual steps
+npm run install:all
+npm run build
+npm run start:prod
+```
+
+In production mode, the backend server will serve both the API and the static frontend files on port 5000.
+
+## Accessing the Application
+
+- **Development**: Visit http://localhost:5173 in your browser
+- **Production**: Visit http://localhost:5000 in your browser
 
 ## Project Structure
 
-- `/frontend` - React application with TypeScript
-- `/backend-new` - Express.js API with TypeScript
-- `/docker-compose.yml` - Container orchestration for deployment
+```
+connectup/
+├── frontend/            # React frontend
+│   ├── src/             # Frontend source code
+│   ├── public/          # Static assets
+│   └── dist/            # Production build (generated)
+├── backend/             # Node.js backend
+│   ├── src/             # Backend source code
+│   └── dist/            # Compiled backend (generated)
+└── package.json         # Root package.json with scripts
+```
 
 ## Troubleshooting
 
-- **MongoDB Connection**: If you see MongoDB connection errors, ensure MongoDB is running on your local machine or update the connection URI in `.env`.
-- **Port Conflicts**: If ports 5001 or 5173 are in use, you can change them in the respective configuration files.
+- If you encounter TailwindCSS issues, run: `cd frontend && npm install -D tailwindcss postcss autoprefixer`
+- If MongoDB connection fails, check your connection string in `backend/.env`
+- For port conflicts, modify the port numbers in the respective environment files
 
 ## License
 
