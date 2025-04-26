@@ -310,7 +310,7 @@ export default function Home() {
                   </div>
                   <div>
                     <h3 className="text-xl font-bold mb-2 group-hover:text-[#C41E3A] transition-colors">Start Recording Session</h3>
-                    <p className="text-gray-400 group-hover:text-gray-300 transition-colors">Use the /startpitch command in any text channel to begin your pitch recording session.</p>
+                    <p className="text-gray-400 group-hover:text-gray-300 transition-colors">Use the !join command to join your voice channel, then !pitch to begin recording.</p>
                   </div>
                 </div>
                 
@@ -339,8 +339,10 @@ export default function Home() {
                     </div>
                     <div className="flex-1 text-center text-gray-500 text-xs">Discord - Pitch Perfect Bot</div>
                   </div>
-                  <p className="text-gray-400 mb-3"><span className="text-[#C41E3A]">@User</span>: /startpitch</p>
-                  <p className="text-gray-300 mb-3 pl-4 border-l-2 border-blue-500"><span className="text-blue-400">@PitchPerfect</span>: I'm ready to record your pitch! Join a voice channel and press the button below when you're ready to start.</p>
+                  <p className="text-gray-400 mb-3"><span className="text-[#C41E3A]">@User</span>: !join</p>
+                  <p className="text-gray-300 mb-3 pl-4 border-l-2 border-blue-500"><span className="text-blue-400">@PitchPerfect</span>: I've joined your voice channel! Type !pitch when you're ready to start recording.</p>
+                  <p className="text-gray-400 mb-3"><span className="text-[#C41E3A]">@User</span>: !pitch</p>
+                  <p className="text-gray-300 mb-3 pl-4 border-l-2 border-blue-500"><span className="text-blue-400">@PitchPerfect</span>: I'm ready to record your pitch! Press the button below when you're ready to start.</p>
                   <p className="text-gray-300 mb-4 pl-4"><button className="bg-[#C41E3A]/80 hover:bg-[#C41E3A] text-white text-xs py-1 px-3 rounded-md transition-colors mr-2">Start Recording</button> <button className="bg-gray-800 text-white text-xs py-1 px-3 rounded-md hover:bg-gray-700 transition-colors">Cancel</button></p>
                   <p className="text-gray-400 mb-3"><span className="text-[#C41E3A]">@User</span>: *clicks Start Recording*</p>
                   <p className="text-gray-300 mb-3 pl-4 border-l-2 border-blue-500"><span className="text-blue-400">@PitchPerfect</span>: 🎙️ Recording started! I'll listen for up to 5 minutes. Say your pitch clearly, and click Stop when you're done.</p>
